@@ -9,8 +9,8 @@ class Case < ApplicationRecord
 
   STATUS_OF_NOT_START = 0
 
-  has_many :subcases, class_name: "Case", foreign_key: "parent_id"
-  belongs_to :parent, class_name: "Case", optional: true
+  has_many :subcases, class_name: 'Case', foreign_key: 'parent_id'
+  belongs_to :parent, class_name: 'Case', optional: true
 
   has_many :photos, as: :photoable
 

@@ -48,8 +48,8 @@ class User < ApplicationRecord
       nickname = obj[:nickname].present? ? encode_nickname(obj[:nickname]) : ''
       avatar = obj[:headimgurl].present? ? obj[:headimgurl] : ''
       user = User.create!(name: nickname,
-                         avatar: avatar,
-                         weixin_openid: obj[:openid])
+                          avatar: avatar,
+                          weixin_openid: obj[:openid])
 
     end
 
