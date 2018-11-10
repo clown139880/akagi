@@ -15,7 +15,7 @@
 
 			<article class="post tag-photography">
 				<header class="cover post-header">
-					<div class="cover-bg" style="background-image: url(<%= @post.case.logo %>);"></div>
+					<div class="cover-bg" style="background-image: url(<%= @post.event.logo %>);"></div>
 					<div class="cover-content">
 						<div class="inner">
 							<div class="post-tags">
@@ -24,7 +24,7 @@
 								<% end %>
 							</div>
 							<!-- .post-tags -->
-							<h1 class="post-title"><%= @post.case.title %></h1>
+							<h1 class="post-title"><%= @post.event.title %></h1>
 							<div class="post-meta">
 								by
 								<span class="post-author"><%= @post.get_nickname %></span>

@@ -12,7 +12,7 @@
     <div class="col-md-8 main">
       <div class="main-hd">
         <%= image_tag @post.get_avatar,class:"gravatar",size:"50x50"  %>
-        <span class="case"><%= link_to @post.case.title, [:blog, @post.case] %></span>
+        <span class="event"><%= link_to @post.event.title, [:blog, @post.event] %></span>
         <span class="timestamps">
           <%= format_datetime(@post.created_at, '%Y-%m-%d %H:%M') %>
           <%= post_options_for(@post) %>

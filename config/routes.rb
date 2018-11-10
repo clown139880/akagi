@@ -26,7 +26,7 @@ Rails.application.routes.draw do
 
     resources :posts
     resources :users
-    resources :cases
+    resources :events
 
   end
 

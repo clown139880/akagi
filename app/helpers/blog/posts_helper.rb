@@ -61,12 +61,12 @@ module Blog::PostsHelper
     if title.include? '<h'
       return title[4..-7]
     else
-      return needTitle ? post.case.title : false;
+      return needTitle ? post.event.title : false;
     end
   end
 
   def post_show_logo_for(post)
-    logo = post.photos.empty? ? post.case.logo : post.photos.first.image
+    logo = post.photos.empty? ? post.event.logo : post.photos.first.image
     image_tag logo
   end
 

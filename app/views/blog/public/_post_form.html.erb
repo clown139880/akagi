@@ -6,7 +6,7 @@
 
     </div>
 
-    <%= f.hidden_field :case_id, value:post.case_id %>
+    <%= f.hidden_field :event_id, value:post.event_id %>
     <div class="img-preview"></div>
     <div class="radio-beauty-container">
       <label>
@@ -20,7 +20,7 @@
         <label for="radioName2" class="radio-beauty"></label>
       </label>
     </div>
-    <%= f.text_field :tag_list, 'data-role'=>'tagsinput', value: post.case.tag_list.join(',') %>
+    <%= f.text_field :tag_list, 'data-role'=>'tagsinput', value: post.event.tag_list.join(',') %>
     <%= f.submit "Post", class:"btn btn-primary" %>
   <% end %>
 </div>

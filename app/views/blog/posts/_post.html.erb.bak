@@ -4,8 +4,8 @@
   </div>
   <div class="post_hd">
     <%= image_tag post.get_avatar,class:"gravatar",size:"50x50"  %>
-    <span class="case_family">
-      <%= link_to(post.case.title+'', [:blog, post.case]) %>
+    <span class="event_family">
+      <%= link_to(post.event.title+'', [:blog, post.event]) %>
     </span>
 
     <span class="timestamps">

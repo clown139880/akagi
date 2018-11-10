@@ -10,118 +10,119 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180823134920) do
+ActiveRecord::Schema.define(version: 2018_09_10_020727) do
 
-  create_table "cases", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "title"
-    t.text     "content",    limit: 65535
-    t.integer  "user_id"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.integer  "level",                    default: 1
-    t.integer  "parent_id"
-    t.string   "nickname",   limit: 50
-    t.integer  "types",                    default: 1
-    t.string   "logo",       limit: 150
-    t.datetime "started_at"
-    t.datetime "ended_at"
-    t.integer  "status",                   default: 0
-    t.string   "place",      limit: 50
-    t.index ["user_id", "updated_at"], name: "index_cases_on_user_id_and_updated_at", using: :btree
-    t.index ["user_id"], name: "index_cases_on_user_id", using: :btree
-  end
-
-  create_table "caseships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "father_id"
-    t.integer  "sub_id"
+  create_table "caseships", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "father_id"
+    t.integer "sub_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["father_id", "sub_id"], name: "index_caseships_on_father_id_and_sub_id", unique: true, using: :btree
-    t.index ["father_id"], name: "index_caseships_on_father_id", using: :btree
-    t.index ["sub_id"], name: "index_caseships_on_sub_id", using: :btree
+    t.index ["father_id", "sub_id"], name: "index_caseships_on_father_id_and_sub_id", unique: true
+    t.index ["father_id"], name: "index_caseships_on_father_id"
+    t.index ["sub_id"], name: "index_caseships_on_sub_id"
   end
 
-  create_table "photos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "title",          limit: 20
-    t.string   "image",          limit: 150
-    t.integer  "photoable_id"
-    t.string   "photoable_type"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.index ["photoable_id"], name: "index_photos_on_photoable_id", using: :btree
+  create_table "events", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "title"
+    t.text "content"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "level", default: 1
+    t.integer "parent_id"
+    t.string "nickname", limit: 50
+    t.integer "types", default: 1
+    t.string "logo", limit: 150
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.integer "status", default: 0
+    t.string "place", limit: 50
+    t.index ["user_id", "updated_at"], name: "index_events_on_user_id_and_updated_at"
+    t.index ["user_id"], name: "index_events_on_user_id"
   end
 
-  create_table "posts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.text     "content",    limit: 65535
-    t.integer  "user_id"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.string   "picture"
-    t.integer  "case_id"
-    t.string   "nickname",   limit: 50
-    t.integer  "types",                    default: 1
-    t.string   "title",      limit: 150
-    t.integer  "status",                   default: 1
-    t.index ["case_id"], name: "index_posts_on_case_id", using: :btree
-    t.index ["user_id", "created_at"], name: "index_posts_on_user_id_and_created_at", using: :btree
-    t.index ["user_id"], name: "index_posts_on_user_id", using: :btree
+  create_table "photos", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "title", limit: 20
+    t.string "url", limit: 150
+    t.integer "photoable_id"
+    t.string "photoable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["photoable_id"], name: "index_photos_on_photoable_id"
   end
 
-  create_table "relationships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "follower_id"
-    t.integer  "followed_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.index ["followed_id"], name: "index_relationships_on_followed_id", using: :btree
-    t.index ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true, using: :btree
-    t.index ["follower_id"], name: "index_relationships_on_follower_id", using: :btree
+  create_table "posts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.text "content"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "event_id"
+    t.string "nickname", limit: 50
+    t.integer "types", default: 1
+    t.string "title", limit: 150
+    t.integer "status", default: 1
+    t.integer "is_synced", limit: 2
+    t.integer "visit_count"
+    t.index ["event_id"], name: "index_posts_on_event_id"
+    t.index ["user_id", "created_at"], name: "index_posts_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
-  create_table "taggings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "tag_id"
-    t.string   "taggable_type"
-    t.integer  "taggable_id"
-    t.string   "tagger_type"
-    t.integer  "tagger_id"
-    t.string   "context",       limit: 128
+  create_table "relationships", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "follower_id"
+    t.integer "followed_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["followed_id"], name: "index_relationships_on_followed_id"
+    t.index ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true
+    t.index ["follower_id"], name: "index_relationships_on_follower_id"
+  end
+
+  create_table "taggings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "tag_id"
+    t.string "taggable_type"
+    t.integer "taggable_id"
+    t.string "tagger_type"
+    t.integer "tagger_id"
+    t.string "context", limit: 128
     t.datetime "created_at"
-    t.index ["context"], name: "index_taggings_on_context", using: :btree
-    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
-    t.index ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
-    t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
-    t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy", using: :btree
-    t.index ["taggable_id"], name: "index_taggings_on_taggable_id", using: :btree
-    t.index ["taggable_type"], name: "index_taggings_on_taggable_type", using: :btree
-    t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type", using: :btree
-    t.index ["tagger_id"], name: "index_taggings_on_tagger_id", using: :btree
+    t.index ["context"], name: "index_taggings_on_context"
+    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
+    t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy"
+    t.index ["taggable_id"], name: "index_taggings_on_taggable_id"
+    t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
+    t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
+    t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
   end
 
-  create_table "tags", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string  "name",                       collation: "utf8_bin"
+  create_table "tags", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", collation: "utf8_bin"
     t.integer "taggings_count", default: 0
-    t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "name"
-    t.string   "email"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
-    t.string   "password_digest"
-    t.string   "remember_digest"
-    t.boolean  "admin",             default: false
-    t.string   "activation_digest"
-    t.boolean  "activated",         default: false
+  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "password_digest"
+    t.string "remember_digest"
+    t.boolean "admin", default: false
+    t.string "activation_digest"
+    t.boolean "activated", default: false
     t.datetime "activated_at"
-    t.string   "reset_digest"
+    t.string "reset_digest"
     t.datetime "reset_sent_at"
-    t.string   "weibo"
-    t.string   "weixin_openid"
-    t.string   "avatar"
-    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.string "weibo"
+    t.string "weixin_openid"
+    t.string "avatar"
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  add_foreign_key "cases", "users"
-  add_foreign_key "posts", "cases"
+  add_foreign_key "events", "users"
+  add_foreign_key "posts", "events"
   add_foreign_key "posts", "users"
 end

@@ -1,0 +1,31 @@
+<% provide(:title,"最新案件") %>
+
+<%= render partial:"blog/public/header", locals:{ str: "events" } %>
+
+<%= render 'blog/public/flash_notice' %>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-8 main">
+      <div class="main-hd">
+        <h3>最近的动向</h3>
+      </div>
+      <div class="main-bd">
+        <ul class="events">
+          <% @events.each do |theevent| %>
+              <li class="event" id="event-<%= theevent.id %>">
+                <div class="event_hd" data-background="image" data-src="<%= theevent.logo %>"  >
+                  <%= link_to theevent.title, [:blog, theevent] , class:"event_title" %>
+                  <p class="body"><% event_content_for(theevent) %></p>
+                  <div class="filter">
+                  </div>
+                </div>
+              </li>
+          <% end %>
+          <%= will_paginate @events %>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>

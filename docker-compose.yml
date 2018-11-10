@@ -1,0 +1,41 @@
+version: '2'
+
+# 创建mysql/redis/bundle的数据卷
+volumes:
+  mysql-data: {}
+  bundle-data: {}
+
+services:
+  web:
+    # 指定构建目录
+    build: .
+    # 指定环境变量文件
+    env_file:
+      - .env
+    command: bundle exec rails s -p 3000 -b 0.0.0.0
+    # 映射项目文件目录，实现容器外的项目文件编辑开发
+    # 映射bundle的数据卷，重新build容器时不用重新下载所有Gem
+    volumes:
+      - .:/usr/app/web
+      - bundle-data:/usr/app/bundle
+    # 将容器的端口映射到宿主机
+    ports:
+      - 3000:3000
+    # 连接指定其他容器，用于在Rails的配置文件中指定数据库容器的Host
+    links:
+      - db:db
+    # 容器间的依赖关系，Docker会根据依赖关系，顺序启动容器
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    # 将mysql的数据挂载到数据卷上，防止数据丢失
+    volumes:
+      - mysql-data:/var/lib/mysql
+    env_file:
+      - .env
+    # 将mysql的端口隐射到宿主机，用于客户端连接管理
+    ports:
+      - 3306:3306
+    command: ['mysqld', '--character-set-server=utf8']

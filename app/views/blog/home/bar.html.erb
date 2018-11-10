@@ -8,28 +8,28 @@
       <h3>最近的动向</h3>
     </div>
     <div class="main-bd">
-      <ul class="cases">
+      <ul class="events">
 
-        <% @cases.each do |thecase| %>
-          <div class="case">
+        <% @events.each do |theevent| %>
+          <div class="event">
 
-            <li id="case-<%= thecase.id %>">
-              <%= link_to thecase.title, [:blog, thecase] , id:"title"%>
+            <li id="event-<%= theevent.id %>">
+              <%= link_to theevent.title, [:blog, theevent] , id:"title"%>
               <span class="timestamps">
                 Edited
-                <%= format_datetime(thecase.updated_at) %>
+                <%= format_datetime(theevent.updated_at) %>
               </span>
-              <p class="body"><%= sanitize markdown(thecase.content).to_s[0..450] %></p>
+              <p class="body"><%= sanitize markdown(theevent.content).to_s[0..450] %></p>
               <span class="posts">
                 <ul class="posts">
-                  <%= render thecase.posts[0..2] %>
+                  <%= render theevent.posts[0..2] %>
                 </ul>
               </span>
 
             </li>
           </div>
         <% end %>
-        <%= will_paginate @cases %>
+        <%= will_paginate @events %>
       </ul>
     </div>
 

@@ -1,5 +1,5 @@
 <article class="grid-item post tag-design" style="height:100%;">
-  <div><%= image_tag post.case.logo, :style => "width:100%" %></div>
+  <div><%= image_tag post.event.logo, :style => "width:100%" %></div>
   <div style="border:#e9686b 1px solid!important;box-shadow: 0 0 8px #e9686b;padding:24px 48px 48px 48px;">
     <header class="post-header">
     <div class="post-tags">
@@ -13,7 +13,7 @@
         <h2 class=""><a href="/blog/posts/<%= post.id %>" rel="bookmark"><%= post_title_for(post) %></a></h2>
       <% end %>
       <div class="post-meta">
-        in <%= link_to post.case.title, [:blog, post.case] %>  by <span class="post-author"><a><%= post.get_nickname %></a></span> on <time class="published" datetime="<%= format_datetime(post.created_at, '%Y-%m-%d %H:%M:%S') %>"><%= format_datetime(post.created_at, '%Y-%m-%d %H:%M:%S') %></time>
+        in <%= link_to post.event.title, [:blog, post.event] %>  by <span class="post-author"><a><%= post.get_nickname %></a></span> on <time class="published" datetime="<%= format_datetime(post.created_at, '%Y-%m-%d %H:%M:%S') %>"><%= format_datetime(post.created_at, '%Y-%m-%d %H:%M:%S') %></time>
       </div><!-- .post-meta -->
     </header><!-- .post-header -->
     <div class="post-content">
