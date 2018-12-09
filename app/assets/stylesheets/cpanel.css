@@ -1,9 +1,10 @@
 /*
  *= require_self
- *= require font-awesome
- *= require ./blogold/editormd
- *= require ./blogold/editormd.logo
- *= require ./blogold/fileinput
  *= require ./cpanel/style
  *= require bootstrap-tagsinput
+ *=require bootstrap 
+ *=require ionicons 
+ *=require iCheck/all 
+*=require datatables/dataTables.bootstrap
+ *=require admin-lte
  */

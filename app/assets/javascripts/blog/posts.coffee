@@ -2,8 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $ ->
-
-
   $('.scroll-down').on 'click', (e) ->
     $cover = $(this).closest('.cover')
     $('html, body').animate { scrollTop: $cover.position().top + $cover.height() }, 800

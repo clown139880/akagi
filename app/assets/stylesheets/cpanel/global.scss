@@ -3,9 +3,7 @@
 body{
   font: 14px/1.6 "Helvetica Neue","Hiragino Sans GB","Microsoft YaHei","黑体",Arial,sans-serif;
 }
-input{
-  outline: 0;
-}
+
 // navbar
 // ---------------------------------------------
 .navbar-cmcm{
@@ -19,7 +17,7 @@ input{
       width: 25%;
     }
     @media (min-width: $screen-md){
-      width: 2/12*100%;
+      width: 3/12*100%;
     }
     .navbar-brand{
       @media (min-width: $screen-sm){

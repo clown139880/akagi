@@ -12,11 +12,11 @@
       </div>
       <div class="main-bd">
         <ul class="events">
-          <% @events.each do |theevent| %>
-              <li class="event" id="event-<%= theevent.id %>">
-                <div class="event_hd" data-background="image" data-src="<%= theevent.logo %>"  >
-                  <%= link_to theevent.title, [:blog, theevent] , class:"event_title" %>
-                  <p class="body"><% event_content_for(theevent) %></p>
+          <% @events.each do |event| %>
+              <li class="event" id="event-<%= event.id %>">
+                <div class="event_hd" data-background="image" data-src="<%= event.get_logo %>"  >
+                  <%= link_to event.title, [:blog, event] , class:"event_title" %>
+                  <p class="body"><% event_content_for(event) %></p>
                   <div class="filter">
                   </div>
                 </div>

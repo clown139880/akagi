@@ -7,7 +7,7 @@
           <ul>
             <% get_latest_posts().each do |post| %>
               <li>
-                <a href="/blog/posts/<%= post.id %>" class="recent-thumb" style="background-image: url(<%= post.logo %>!315x315);">
+                <a href="/blog/posts/<%= post.id %>" class="recent-thumb" style="background-image: url(<%= post.logo %>);">
                   <span class="screen-reader-text"><%=  post_title_for(post, true) %></span>
                 </a>
                 <div class="recent-title">
@@ -33,7 +33,7 @@
           <div id="instafeed" class="instagram-feed">
             <% get_latest_images().each do |image| %>
             <div class="instagram-item">
-              <a target="_blank" href="<%= url_for([:blog, image.photoable])%>"><img src="<%= image.url %>!315x315" alt="<%= image.title %>"></a>
+              <a target="_blank" href="<%= url_for([:blog, image.photoable])%>"><img src="<%= image.url_small %>" alt="<%= image.key %>"></a>
             </div>
             <% end %>
           </div>

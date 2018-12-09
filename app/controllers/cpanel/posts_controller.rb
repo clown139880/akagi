@@ -7,14 +7,14 @@ class Cpanel::PostsController < Cpanel::BaseController
   end
 
 	def new
-		@cases = Case.all
+		@events = Event.all
 		@post = Post.new
 	end
 
   def create
     @post = User.first.posts.build post_params
     if @post.save
-      @post.case.update_attribute(:updated_at,Time.zone.now)
+      @post.event.update_attribute(:updated_at,Time.zone.now)
       if params[:is_share] == "1"
         weibo_share @post
       end
@@ -59,7 +59,7 @@ class Cpanel::PostsController < Cpanel::BaseController
 
   private
   def post_params
-    params.require(:post).permit(:title, :content, :picture, :case_id, :tag_list, photos_attributes:[:image])
+    params.require(:post).permit(:title, :content, :picture, :event_id, :tag_list, photos_attributes:[:image])
   end
 
 	def set_post

@@ -12,7 +12,7 @@ gem 'bootsnap', require: false
 #尝试屏蔽puma
 #gem 'puma', '3.4.0'
 # Use SCSS for stylesheets
-gem 'bootstrap-sass', '> 3.3.6'
+gem 'adminlte-rails'
 gem 'sass-rails', '> 5.0.6'
 gem 'faker', '> 1.6.3'
 gem 'will_paginate', '> 3.1.0'
@@ -56,6 +56,7 @@ gem "sanitize",           "> 2.0",   :require => false
 gem 'weui-rails'
 gem 'qiniu'
 gem 'jwt'
+gem 'mini_racer'
 
 gem 'multipart-post'
 

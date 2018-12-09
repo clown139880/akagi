@@ -28,7 +28,7 @@ class Post < ApplicationRecord
   end
 
   def logo
-    self.photos.empty? ? self.event.logo : self.photos.first.url
+    self.photos.empty? ? self.event.get_logo : self.photos.last.url
   end
 
 end

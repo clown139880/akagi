@@ -1,12 +1,13 @@
 //= require jquery
 //= require jquery_ujs
-//= require bootstrap-sprockets
 //= require moment
 //= require moment/zh-cn
 //= require bootstrap-datetimepicker
-//= require ./blog/editormd.min
+//= require ./blog/editormd
 //= require ./blog/fileinput.min
 //= require ./blog/fileinput_locale_zh
 //= require bootstrap-tagsinput
 //= require ./blog/posts
 //= require_tree ./cpanel
+//= require bootstrap.min
+//= require admin-lte

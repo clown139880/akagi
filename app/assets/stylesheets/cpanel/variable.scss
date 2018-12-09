@@ -9,11 +9,11 @@ $link-color: #333;
 $link-gray: #888;
 $link-red: #f00;
 $link-blue: #4A90E2;
-$link-green: #44b549;
+$link-green: #e9686b;
 $link-purple: #D43DE8;
 $link-color-bg: #f4f5f9;
-$active-color: #44b549;
-$active-hover: #2CA530;
+$active-color: #e9686b;
+$active-hover: #e9686b;
 // navbar
 $navbar-bg: #fff;
 $navbar-border: $border-color;
@@ -47,9 +47,6 @@ $sidebar-menu-dt-color: #8d8d8d;
 $main-border: $border-color;
 $main-hd-border: $border-color;
 $main-hd-fontsize: 16px;
-//shop
-$shop-infor-border:$border-color;
-$shop-label-color: $link-gray;
 //table
 $table-link-color: $link-color;
 $table-border: $border-color;
@@ -85,14 +82,6 @@ $nav-tabs-border: $border-color;
 $nav-tabs-link: $link-gray;
 $nav-tabs-link-hover: $link-color;
 $nav-tabs-link-active: $active-color;
-//product-item
-$product-item-border: $border-color;
-$product-item-hd-bg: $link-color-bg;
-$product-item-p-color: $link-gray;
-$product-price-color: $link-red;
-$product-link-color: $link-color;
-//order
-$input-group-order: $input-border;
 //data
 $data-total-bg: $link-color-bg;
 $data-total-border: $border-color;

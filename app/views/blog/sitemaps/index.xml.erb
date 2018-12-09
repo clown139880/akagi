@@ -5,12 +5,12 @@
     <changefreq>always</changefreq>
     <priority>1.0</priority>
   </url>
-  <% @events.each do |theevent| %>
+  <% @events.each do |event| %>
   <url>
-    <loc><%= Settings.visit_url + url_for([:blog, theevent]) %></loc>
+    <loc><%= Settings.visit_url + url_for([:blog, event]) %></loc>
     <priority>0.7</priority>
     <changefreq>hourly</changefreq>
-    <lastmod><%= theevent.updated_at.strftime('%Y-%m-%d') %></lastmod>
+    <lastmod><%= event.updated_at.strftime('%Y-%m-%d') %></lastmod>
   </url>
   <% end %>
   <% @posts.each do |post| %>

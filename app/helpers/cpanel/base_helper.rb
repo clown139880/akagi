@@ -1,7 +1,7 @@
 module Cpanel::BaseHelper
 
   def top_c_navbar(str)
-    top_c_home(str) +  top_c_case(str) + top_c_post(str)
+    top_c_home(str) +  top_c_event(str) + top_c_post(str)
   end
 
   def top_c_home(str)
@@ -12,10 +12,10 @@ module Cpanel::BaseHelper
   end
 
 
-  def top_c_case(str)
-    cls = "cases" == str ? "active" : ""
+  def top_c_event(str)
+    cls = "events" == str ? "active" : ""
     content_tag :li, class: cls do
-      link_to "地球图书馆", [:cpanel, :cases]
+      link_to "地球图书馆", [:cpanel, :events]
     end
   end
 

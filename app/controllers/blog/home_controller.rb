@@ -1,7 +1,7 @@
 class Blog::HomeController < Blog::BaseController
 
   def index
-    @cases = Event.paginate(page: params[:page], per_page: 10)
+    @events = Event.paginate(page: params[:page], per_page: 10)
   end
 
   def about

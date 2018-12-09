@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_10_020727) do
+ActiveRecord::Schema.define(version: 2018_11_12_051825) do
 
   create_table "caseships", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "father_id"
@@ -32,7 +32,6 @@ ActiveRecord::Schema.define(version: 2018_09_10_020727) do
     t.integer "parent_id"
     t.string "nickname", limit: 50
     t.integer "types", default: 1
-    t.string "logo", limit: 150
     t.datetime "started_at"
     t.datetime "ended_at"
     t.integer "status", default: 0
@@ -41,17 +40,30 @@ ActiveRecord::Schema.define(version: 2018_09_10_020727) do
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
+  create_table "events_users", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "event_id", null: false
+    t.integer "type"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "event_id", "type"], name: "index_events_users_on_user_id_and_event_id_and_type"
+  end
+
   create_table "photos", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "title", limit: 20
+    t.string "key", limit: 150
+    t.boolean "is_logo", default: false
     t.string "url", limit: 150
     t.integer "photoable_id"
     t.string "photoable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["photoable_id"], name: "index_photos_on_photoable_id"
+    t.index ["photoable_type", "photoable_id"], name: "index_photos_on_photoable_type_and_photoable_id"
   end
 
   create_table "posts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "visit_count", default: 0
     t.text "content"
     t.integer "user_id"
     t.datetime "created_at", null: false
@@ -61,8 +73,7 @@ ActiveRecord::Schema.define(version: 2018_09_10_020727) do
     t.integer "types", default: 1
     t.string "title", limit: 150
     t.integer "status", default: 1
-    t.integer "is_synced", limit: 2
-    t.integer "visit_count"
+    t.boolean "is_synced", default: false
     t.index ["event_id"], name: "index_posts_on_event_id"
     t.index ["user_id", "created_at"], name: "index_posts_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_posts_on_user_id"

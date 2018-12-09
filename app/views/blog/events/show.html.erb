@@ -10,7 +10,7 @@
   <main class="site-main">
     <div class="site-content">
       <header class="cover post-header">
-        <div class="cover-bg" style="background-image: url(<%= @event.logo %>);"></div>
+        <div class="cover-bg" style="background-image: url(<%= @event.get_logo %>);"></div>
         <div class="cover-content">
           <div class="inner">
             <div class="post-tags">
@@ -22,7 +22,7 @@
             <h1 class="post-title" style="color: #fff;font-size:40px"><%= @event.title %></h1>
             <div class="post-meta">
               by
-              <span class="post-author"><%= @event.get_username %></span>
+              <span class="post-author"><%= @event.get_owner_name %></span>
               on
               <time class="published"><%= format_datetime(@event.updated_at) %></time>
             </div>

@@ -16,8 +16,11 @@ defaults: &defaults
   redis_db: 14
 # Redis end
 
+# OSS
+  end_point: 'https://akagi.oss-cn-hangzhou.aliyuncs.com/'
+#
 
-
+  default_event_logo: 'http://phv6tif06.bkt.clouddn.com//blog/1511962137717.JPG'
 development:
   <<: *defaults
   visit_url: 'http://192.168.4.146:3000'

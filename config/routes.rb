@@ -27,16 +27,15 @@ Rails.application.routes.draw do
     resources :posts
     resources :users
     resources :events
-
   end
 
   namespace :cpanel do
 
-    root 'cases#index'
+    root 'events#index'
 
     resources :posts
     resources :users
-    resources :cases do
+    resources :events do
       collection do
         post :get_options
       end

@@ -1,4 +1,4 @@
-<%= render partial: 'cpanel/public/header', locals: { str: 'cases' } %>
+<%= render partial: 'cpanel/public/header', locals: { str: 'events' } %>
 
 <div class="container-fluid">
   <div class="row">
@@ -15,22 +15,21 @@
               <thead>
                 <tr>
                   <th>名称</th>
+                  <th>创建于</th>
                   <th>开始于</th>
                   <th>结束于</th>
-                  <th>地点</th>
-                  <th>状态</th>
-                  <th>分类</th>
-                  <th>操作</th>
+                  <th width='60px'>地点</th>
+                  <th width='60px'>操作</th>
                 </tr>
               </thead>
 
-              <tbody id="cases-body">
-                <%= render partial: 'case', collection: @cases, as: :thecase, locals: { page: params[:page] } %>
+              <tbody id="events-body">
+                <%= render partial: 'event', collection: @events, as: :event, locals: { page: params[:page] } %>
               </tbody>
 
             </table>
             <ul class="pagination pull-right">
-              <%= will_paginate @cases %>
+              <%= will_paginate @events %>
             </ul>
           </div>
         </div>

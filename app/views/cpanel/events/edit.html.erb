@@ -1,4 +1,4 @@
-<%= render partial: 'cpanel/public/header', locals: { str: 'cases' } %>
+<%= render partial: 'cpanel/public/header', locals: { str: 'events' } %>
 
 <div class="container-fluid">
   <div class="row">
@@ -7,7 +7,7 @@
 		  <div class="main-hd">
 		    <h5>修改案件</h5>
 		  </div>
-		  <%= render partial: 'form', locals: { thecase: @case }%>
+		  <%= render partial: 'form', locals: { event: @event }%>
 		</div>
 	</div>
 </div>

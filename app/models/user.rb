@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_secure_password
   has_many :posts, dependent: :destroy
   #TODO: 关注事件，事件邀请，事件追踪
+  has_and_belongs_to_many :events
 
   class << self
     def create_user(obj)

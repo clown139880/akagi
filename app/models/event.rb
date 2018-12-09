@@ -1,6 +1,7 @@
 class Event < ApplicationRecord
 
   has_many :photos, as: :photoable
+  has_and_belongs_to_many :users
 
   accepts_nested_attributes_for :photos, reject_if: proc{ |photo|
               photo['url'].blank?  }
@@ -18,6 +19,36 @@ class Event < ApplicationRecord
 
   def get_ended
     self.ended_at ? self.ended_at.strftime('%Y-%m-%d') : ''
+  end
+
+  def status_str
+    case self.status
+    when 0
+      'unknow'
+    else 
+      'unknow'
+    end
+  end
+
+  def types_str
+    case self.types
+    when 0
+      'unknow'
+    else 
+      'unknow'
+    end
+  end
+
+  def logo
+    self.photos.logo.first ? self.photos.logo.first.url : ''
+  end
+
+  def get_owner_name
+    self.user ? self.user.name : 'admin'
+  end
+
+  def get_logo
+    self.photos.empty? ? Settings.default_event_logo : self.photos.logo.first ? self.photos.logo.first.url : self.photos.last.url
   end
 
 end

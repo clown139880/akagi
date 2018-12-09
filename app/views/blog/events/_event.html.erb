@@ -1,28 +1,28 @@
 <article class="grid-item post tag-photography">
   <div class="post-inside">
-    <div class="post-bg" style="background-image: url(<%= everyevent.logo %>)"></div>
+    <div class="post-bg" style="background-image: url(<%= event.get_logo %>)"></div>
     <header class="post-header">
       <div class="post-tags">
-        <% everyevent.tag_list.each do |tag|  %>
+        <% event.tag_list.each do |tag|  %>
           <%= link_to tag, [:blog, :posts, tag: tag] %>
         <% end %>
       </div>
       <h2 class="post-title">
-        <%= link_to everyevent.title, [:blog, everyevent] %>
+        <%= link_to event.title, [:blog, event] %>
       </h2>
       <div class="post-meta">
         by
         <span class="post-author">
-          <%= link_to everyevent.get_username, [:blog, everyevent] %>
+          <%= link_to event.get_owner_name, [:blog, event] %>
         </span>
         on
-        <time class="published"><%= format_datetime(everyevent.updated_at) %></time>
+        <time class="published"><%= format_datetime(event.updated_at) %></time>
       </div>
       <!-- .post-meta -->
     </header>
     <!-- .post-header -->
     <div class="read-more">
-      <%= link_to 'Read More', [:blog, everyevent], { class: "button light", title: everyevent.title } %>
+      <%= link_to 'Read More', [:blog, event], { class: "button light", title: event.title } %>
     </div>
   </div>
 </article>

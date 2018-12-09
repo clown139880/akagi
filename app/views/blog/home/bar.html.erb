@@ -10,19 +10,19 @@
     <div class="main-bd">
       <ul class="events">
 
-        <% @events.each do |theevent| %>
+        <% @events.each do |event| %>
           <div class="event">
 
-            <li id="event-<%= theevent.id %>">
-              <%= link_to theevent.title, [:blog, theevent] , id:"title"%>
+            <li id="event-<%= event.id %>">
+              <%= link_to event.title, [:blog, event] , id:"title"%>
               <span class="timestamps">
                 Edited
-                <%= format_datetime(theevent.updated_at) %>
+                <%= format_datetime(event.updated_at) %>
               </span>
-              <p class="body"><%= sanitize markdown(theevent.content).to_s[0..450] %></p>
+              <p class="body"><%= sanitize markdown(event.content).to_s[0..450] %></p>
               <span class="posts">
                 <ul class="posts">
-                  <%= render theevent.posts[0..2] %>
+                  <%= render event.posts[0..2] %>
                 </ul>
               </span>
 

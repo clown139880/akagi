@@ -15,7 +15,7 @@
 
 			<article class="post tag-photography">
 				<header class="cover post-header">
-					<div class="cover-bg" style="background-image: url(<%= @post.event.logo %>);"></div>
+					<div class="cover-bg" style="background-image: url(<%= @post.event.get_logo %>);"></div>
 					<div class="cover-content">
 						<div class="inner">
 							<div class="post-tags">
@@ -27,7 +27,7 @@
 							<h1 class="post-title"><%= @post.event.title %></h1>
 							<div class="post-meta">
 								by
-								<span class="post-author"><%= @post.get_nickname %></span>
+								<span class="post-author"><%= @post.get_username %></span>
 								on
 								<time class="published"><%= format_datetime(@post.updated_at) %></time>
 							</div>
@@ -54,9 +54,9 @@
 						<wb:share-button appkey="2957192072" addition="text" type="button" ralateUid="1687210550"></wb:share-button>
 					</div>
 					<div class="author-box">
-						<img src="<%= @post.user.avatar %>" alt="John Doe&#39;s Picture" class="author-avatar">
+						<img src="<%= @post.user.avatar %>" alt="UniClown&#39;s Picture" class="author-avatar">
 						<h2 class="author-title">About
-							<%= link_to @post.get_nickname, '/blog' %>
+							<%= link_to @post.get_username, '/blog' %>
 						</h2>
 						<p class="author-description">这家伙很懒，什么都没留下。没错，我就是不想写。</p>
 						<p class="author-links">

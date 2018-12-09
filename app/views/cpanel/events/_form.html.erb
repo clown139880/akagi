@@ -1,0 +1,59 @@
+<div class="main-bd">
+  <%= render partial: 'cpanel/public/error', locals: { obj: event } %>
+  <div class="form">
+    <%= form_for [:cpanel, event], html: { class: "form-horizontal" } do |f| %>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">标题</label>
+        <div class="col-sm-8">
+          <%= f.text_field :title, value: event.title, class: 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">地点</label>
+        <div class="col-sm-8">
+          <%= f.text_field :place, value: event.place, class: 'form-control' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">标签</label>
+        <div class="col-sm-8">
+          <%= f.text_field :tag_list, 'data-role'=>'tagsinput', value: event.tag_list.join(',') %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">LOGO</label>
+        <div class="col-sm-8" >
+          <%= f.text_field :logo, value: event.logo, class: 'form-control'  %>
+          <%= image_tag event.logo, class:"img-responsive", id:"logo_preview" %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">开始时间</label>
+        <div class="col-sm-3">
+          <div class="input-group">
+          <%= f.text_field :started_at, value: event.started_at, class: 'form-control', placeholder: '请输入开始时间' %>
+          </div>
+        </div>
+        <label class="col-sm-2 control-label">结束时间</label>
+        <div class="col-sm-3">
+          <div class="input-group">
+          <%= f.text_field :ended_at, value: event.ended_at, class: 'form-control', placeholder: '请输入结束时间' %>
+          <span class="uni-time"></span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group btn-area">
+        <div class="col-sm-offset-4 col-sm-10">
+          <%= f.submit '提交', class: 'btn btn-primary' %>
+          <%= link_to '返回', [:cpanel, :events], class: 'btn btn-default' %>
+        </div>
+      </div>
+      <div id="editormd">
+        <%= f.text_area :content, class: 'form-control',style:"display:none;" %>
+      </div>
+      <div style="height: 80px">
+      </div>
+
+    <% end %>
+  </div>
+</div>

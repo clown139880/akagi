@@ -1,6 +1,6 @@
 <tr>
   <td><%= post.title %></td>
-  <td><%= post.case.title %></td>
+  <td><%= post.event.title %></td>
   <td>
     <%= link_to '', [:edit, :cpanel, post], class:'cm-edit', title: '点击编辑' %> |
     <%= link_to '', [:cpanel, post], method: :delete, data: { confirm: '确认删除' }, class: 'cm-close', title: '点击删除' %>
