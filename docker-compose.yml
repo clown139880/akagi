@@ -12,11 +12,13 @@ services:
     # 指定环境变量文件
     env_file:
       - .env
-    command: bundle exec rails s -p 3000 -b 0.0.0.0
+    #command: bundle exec rails s -p 3000 -b 0.0.0.0
+    command: bash -c "rm -fR tmp/pids/* ; bundle exec unicorn -p 3000 -c config/unicorn.rb  -e production"
     # 映射项目文件目录，实现容器外的项目文件编辑开发
     # 映射bundle的数据卷，重新build容器时不用重新下载所有Gem
     volumes:
       - .:/usr/app/web
+      - /tmp/sockets
       - bundle-data:/usr/app/bundle
     # 将容器的端口映射到宿主机
     ports:
@@ -39,3 +41,17 @@ services:
     ports:
       - 3306:3306
     command: ['mysqld', '--character-set-server=utf8']
+
+  nginx:
+    restart: always
+    build: ./nginx/
+    ports:
+      - "80:80"
+    volumes_from:
+      - web
+    volumes:
+      - ./nginx/log:/var/log/nginx
+    links:
+      - web:web
+    depends_on:
+      - web

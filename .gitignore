@@ -31,3 +31,4 @@ shared/log/*
 
 /bin/*
 .DS_store
+nginx/log/*
