@@ -6,7 +6,8 @@ module Rails
   end
 end
 
-worker_processes 4
+## production 内存不足
+worker_processes 2
 
 working_directory Rails.root
 
