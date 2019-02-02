@@ -25,3 +25,4 @@ ADD Gemfile /usr/app/web/Gemfile
 ADD Gemfile Gemfile.lock
 RUN bundle install
 RUN bundle lock --add-platform x86-mingw32 x86-mswin32 x64-mingw32 java
+RUN gem install unicorn
