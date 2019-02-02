@@ -32,7 +32,7 @@ class MoveImagesFromQiniuToOss < ActiveRecord::Migration[5.2]
     end
     saveKeyFromUrl(Photo.all + urls)
     Post.all.update :user_id => 1
-    Photo.all.where(:photoable_type => 'Case').upate :photoable_type => 'Event'
+    Photo.all.where(:photoable_type => 'Case').update :photoable_type => 'Event'
     remove_column :events, :logo
   end
 
