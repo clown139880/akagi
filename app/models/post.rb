@@ -19,6 +19,14 @@ class Post < ApplicationRecord
     self.user ? self.user.name : ""
   end
 
+  def content
+    raw = read_attribute(:content)
+    self.photos.map do |photo| 
+      raw.gsub! photo.origin_url photo.url
+    end
+    return raw
+  end
+
   def get_avatar
     if self.user
       self.user.avatar
