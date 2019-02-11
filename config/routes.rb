@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     resources :posts
     resources :users
     resources :events
+    resources :cases, controller: 'events'
   end
 
   namespace :cpanel do
