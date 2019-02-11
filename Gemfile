@@ -63,7 +63,7 @@ gem 'multipart-post'
 #gem 'redis', '> 3.0'
 #gem 'redis-namespace'
 #gem 'weixin_authorize', git: 'https://github.com/wikimo/weixin_authorize.git'
-gem 'weixin_rails_middleware'
+#gem 'weixin_rails_middleware'
 gem 'settingslogic'
 gem 'mysql2'
 gem 'acts-as-taggable-on', '> 4.0' #标签

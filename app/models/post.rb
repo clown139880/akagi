@@ -22,7 +22,7 @@ class Post < ApplicationRecord
   def content
     raw = read_attribute(:content)
     self.photos.map do |photo| 
-      raw.gsub! photo.origin_url photo.url
+      raw.gsub! photo.origin_url, photo.url
     end
     return raw
   end
