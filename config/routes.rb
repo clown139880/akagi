@@ -18,7 +18,6 @@ Rails.application.routes.draw do
   end
 
   namespace :blog do
-
     root 'home#index'
     get '/bar', to:'home#bar'
     get '/login', to:'sessions#new',     as: :login
@@ -54,14 +53,13 @@ Rails.application.routes.draw do
       end
     end
     resources :users
-    resources :cases
+    resources :events
+    resources :cases, controller: 'events'
     resources :photos do
       collection do
         post :gettoken
       end
     end
-
-
   end
 
 end

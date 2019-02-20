@@ -38,7 +38,4 @@ module Wechat::HomeHelper
     end
   end
 
-
-
-
 end

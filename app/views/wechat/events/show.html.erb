@@ -1,16 +1,16 @@
-<% provide(:title,@case.title) %>
+<% provide(:title,@event.title) %>
 <div class="container">
   <div class="main">
     <header>
-      <%= @case.title %>
-      <a class="cm-back to_back" href="/wechat/cases"></a>
-      <a class="to_right" href="/wechat/posts/new?id=<%= @case.id %>">回复</a>
+      <%= @event.title %>
+      <a class="cm-back to_back" href="/wechat/events"></a>
+      <a class="to_right" href="/wechat/posts/new?id=<%= @event.id %>">回复</a>
     </header>
     <div class="content">
 
       <div class="swiper-container">
         <div class="swiper-wrapper">
-          <%= render partial: 'slide', collection: @case.photos, as: :slide %>
+          <%= render partial: 'slide', collection: @event.photos, as: :slide %>
         </div>
         <div class="swiper-pagination"></div>
       </div>
@@ -24,17 +24,17 @@
 
       <div class="box">
         <h4>
-          <%= @case.get_username %>
+          <%= @event.get_owner_name %>
           <span>reply at
-          </span><%= format_datetime(@case.created_at) %></h4>
+          </span><%= format_datetime(@event.created_at) %></h4>
         <p>
           <span class="image right">
-            <%= image_tag @case.get_avatar  %>
-          </span><%= sanitize markdown(@case.content).to_s %></p>
+            <%= image_tag @event.get_avatar  %>
+          </span><%= sanitize markdown(@event.content).to_s %></p>
       </div>
 
 
-      <div class="weui_panel cells_top dropload-content" data-url="/wechat/posts/more?id=<%= @case.id%>">
+      <div class="weui_panel cells_top dropload-content" data-url="/wechat/posts/more?id=<%= @event.id%>">
         <div class="weui_panel_bd list">
           <%= render partial:'post', collection:@posts, as: :post %>
         </div>
@@ -53,7 +53,7 @@
               <%= f.text_field :nickname, value: @post.nickname %>
             </div>
             <%= f.hidden_field :types, value:2 %>
-            <%= hidden_field_tag :id, @case.id  %>
+            <%= hidden_field_tag :id, @event.id  %>
             <ul class="actions">
               <li>
                 <input type="submit" name="submit" id="submit" value="Send Message" />
@@ -68,12 +68,13 @@
   </div>
 
 </div>
-<%= render partial: 'wechat/public/jsapi'  %>
+
+<%#= render partial: 'wechat/public/jsapi'  %>
 
 <script type="text/javascript">
   wx.ready(function () {
-    wx.onMenuShareAppMessage({title: "<%= @case.title %>", desc: "<%= wechat_desc_for_case(@case) %>", link: "<%= Settings.visit_url %>/wechat/cases/<%= @case.id %>", imgUrl: "<%= @case.logo %>", success: function () {}});
-    wx.onMenuShareTimeline({title: "<%= @case.title %>", link: "<%= Settings.visit_url %>/wechat/cases/<%= @case.id %>", imgUrl: "<%= @case.logo %>", success: function () {}});
+    wx.onMenuShareAppMessage({title: "<%= @event.title %>", desc: "<%= wechat_desc_for_event(@event) %>", link: "<%= Settings.visit_url %>/wechat/events/<%= @event.id %>", imgUrl: "<%= @event.logo %>", success: function () {}});
+    wx.onMenuShareTimeline({title: "<%= @event.title %>", link: "<%= Settings.visit_url %>/wechat/events/<%= @event.id %>", imgUrl: "<%= @event.logo %>", success: function () {}});
   });
 
   wx.error(function (res) {

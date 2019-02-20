@@ -22,3 +22,8 @@
     </div>
   </div>
 </div>
+<%= hidden_field_tag 'OSSAccessKeyId', @oss_uploader.access_key %>
+<%= hidden_field_tag 'policy', @oss_uploader.policy %>
+<%= hidden_field_tag 'Signature', @oss_uploader.signature %>
+<%= hidden_field_tag 'key', @oss_uploader.key %>
+<%= hidden_field_tag 'bucket_endpoint', @oss_uploader.bucket_endpoint %>

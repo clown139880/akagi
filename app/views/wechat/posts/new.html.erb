@@ -1,8 +1,8 @@
 <div class="container">
   <div class="main">
     <header>
-      reply to <%= @case.title %>
-      <a class="cm-back to_back" href="/wechat/cases/<%= @case.id %>"></a>
+      reply to <%= @event.title %>
+      <a class="cm-back to_back" href="/wechat/events/<%= @event.id %>"></a>
     </header>
     <div class="content">
       <section class="wrapper style1 align-center">
@@ -19,7 +19,8 @@
             </div>
             <%= render partial:'/wechat/public/photo', locals: { types: 'post' } %>
             <%= f.hidden_field :types, value:2 %>
-            <%= hidden_field_tag :id, @case.id  %>
+            <%= hidden_field_tag :id, @event.id  %>
+
             <ul class="actions">
               <li>
                 <button  onclick="formsubmit('post');"/>Send Message</button>

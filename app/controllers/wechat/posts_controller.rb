@@ -1,42 +1,47 @@
 class Wechat::PostsController < Wechat::BaseController
 
   #before_action :log_in
-  before_action :set_case
+  before_action :set_event
 
 
   def new
-    @post = @case.posts.build(nickname: Settings.nicknames.sample, types:3)
+    @oss_uploader = OssUploader.new
+    @post = @event.posts.build(nickname: Settings.nicknames.sample, types:3)
   end
 
   def create
-    @post = @case.posts.build post_param
-    if @post.nickname == '麻仓月轩'
-      @post.user = User.first
-    end
+    @post = @event.posts.build post_param
+    #TODO 当前用户
+    @post.user = User.first
     if @post.photos
       @post.photos.each do |photo|
-        md = '  ![](' + photo.image + ')'
+        md = '  ![](' + photo.url + ')'
         @post.content = @post.content + md
       end
     end
-    @post.save
-    redirect_to [:wechat,  @case]
+    if @post.save!
+      redirect_to [:wechat,  @event]
+    else
+      #获取错误信息
+      @post.errors.full_messages
+      render :new
+    end
   end
 
   def more
-    @posts = @case.posts.paginate(page: params[:page], per_page: 5)
-    render partial: '/wechat/cases/post', collection: @posts, as: :post
+    @posts = @event.posts.paginate(page: params[:page], per_page: 5)
+    render partial: '/wechat/events/post', collection: @posts, as: :post
   end
 
 
   private
-  def set_case
-    @case = Case.find_by(id: params[:id])
+  def set_event
+    @event = Event.find_by(id: params[:id])
   end
 
   def post_param
-    params['post']['photos_attributes'] = params['case']['photos_attributes'] if params['case']
-    params.require('post').permit(:nickname, :content, :types, photos_attributes:[:image])
+    params['post']['photos_attributes'] = params['uploads']['photos_attributes'] if params['uploads']
+    params.require('post').permit(:nickname, :content, :types, photos_attributes:[:url])
   end
 
 end

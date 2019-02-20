@@ -59,6 +59,7 @@ gem 'jwt'
 gem 'mini_racer'
 
 gem 'multipart-post'
+gem "aliyun-oss-sdk", require: 'aliyun/oss'
 
 #gem 'redis', '> 3.0'
 #gem 'redis-namespace'

@@ -2,26 +2,26 @@
   <div class="main">
     <header>
       发布新帖
-      <a class="cm-back to_back" href="/wechat/cases"></a>
+      <a class="cm-back to_back" href="/wechat/events"></a>
     </header>
     <div class="content">
       <section class="wrapper style1 align-center">
         <div class="inner medium">
           <h2>发布</h2>
-          <%= form_for [:wechat, @case] do |f| %>
+          <%= form_for [:wechat, @event] do |f| %>
           <div class="field">
             <label for="message">Title</label>
-            <%= f.text_field :title, value: @case.title%>
+            <%= f.text_field :title, value: @event.title%>
           </div>
           <div class="field">
             <label for="message">Content</label>
-            <%= f.text_area :content, value: @case.content,rows:"6" %>
+            <%= f.text_area :content, value: @event.content,rows:"6" %>
           </div>
           <label for="name">Name</label>
             <div class="field first">
-              <%= f.text_field :nickname, value: @case.nickname %>
+              <%= f.text_field :nickname, value: @event.nickname %>
             </div>
-            <%= render partial:'wechat/public/photo', locals: { types: 'case' } %>
+            <%= render partial:'wechat/public/photo', locals: { types: 'event' } %>
             <%= f.hidden_field :types, value:2 %>
                 <button  onclick="formsubmit();"/>Send Message</button>
 

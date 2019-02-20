@@ -32,3 +32,6 @@ shared/log/*
 /bin/*
 .DS_store
 nginx/log/*
+
+config/global_conf.yml
+config/database.yml

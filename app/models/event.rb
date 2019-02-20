@@ -47,6 +47,10 @@ class Event < ApplicationRecord
     self.user ? self.user.name : 'admin'
   end
 
+  def get_avatar
+    self.user ? self.user.avatar : 'http://tvax4.sinaimg.cn/crop.136.1.388.388.1024/6490ca36ly8flf7tqek7fj20go0gk0w7.jpg'
+  end
+
   def get_logo
     self.photos.empty? ? Settings.default_event_logo : self.photos.logo.first ? self.photos.logo.first.url : self.photos.last.url
   end
