@@ -1,7 +1,11 @@
 <div class="box">
   <h4 style="text-align:<%= (post_counter + 1) % 2 == 1 ? 'right' : 'left' %>;">
     <%= post.get_username %>
-    <span>reply at </span><%= format_datetime(post.created_at||Time.now) %></h4>
+    <span>reply at </span><%= format_datetime(post.created_at||Time.now) %>
+    <% if logged_in? %>
+      <a href='/wechat/posts/<%= post.id %>/edit'>编辑</a>
+    <% end %>
+  </h4>
   <p class="content">
     <span class="image <%= (post_counter + 1) % 2 == 1 ? 'right' : 'left' %>">
       <%= image_tag post.get_avatar  %>

@@ -2,7 +2,6 @@ class Wechat::BaseController < ApplicationController
 
   layout 'wechat'
 
-
   #before_action :wechat_oauth
 
   protected

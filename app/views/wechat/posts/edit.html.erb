@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="main">
+    <header>
+      reply to <%= @event.title %>
+      <a class="cm-back to_back" href="/wechat/events/<%= @event.id %>"></a>
+    </header>
+    <div class="content">
+      <section class="wrapper style1 align-center">
+        <div class="inner medium">
+          <h2>Reply</h2>
+          <%= form_for [:wechat, @post] do |f| %>
+          <div class="field">
+            <label for="message">Message</label>
+            <%= f.text_area :content, value: @post.content,rows:"6" %>
+          </div>
+          <label for="name">Name</label>
+            <div class="field first">
+              <%= f.text_field :nickname, value: @post.nickname %>
+            </div>
+            <%= render partial:'/wechat/public/photo', locals: { types: 'post' } %>
+            <%= f.hidden_field :types, value:2 %>
+            <%= hidden_field_tag :id, @event.id  %>
+
+            <ul class="actions">
+              <li>
+                <button  onclick="formsubmit('post');"/>Send Message</button>
+              </li>
+            </ul>
+          <% end %>
+
+        </div>
+      </section>
+    </div>
+
+  </div>
+</div>

@@ -1,7 +1,7 @@
 $ ->
   $photos = 0
 
-  showphoto =(photo)->
+  showphoto =(photo, key)->
     $('#image' + $photos).removeClass 'weui-uploader__file_status'
     $('#image' + $photos).attr 'style', 'background-image:url(' + photo + '!200x200)'
     input = document.createElement('input')
@@ -9,6 +9,7 @@ $ ->
     input.value = photo
     input.type = 'hidden'
     $('.img-preview').append input
+    $('#post_content').val  $('#post_content').val() + "\r\n" + '![' + key  + '](' + photo + ')'  
     $photos = $photos + 1
 
   $('#qiniuimage').change ->
@@ -31,7 +32,7 @@ $ ->
     xhr.send(data);
     xhr.onreadystatechange = (response)->
       if (xhr.readyState == 4 && xhr.status == 200)
-        showphoto $('#bucket_endpoint').val() + key
+        showphoto $('#bucket_endpoint').val() + key , key
       else if (xhr.status != 200 && xhr.responseText)
         console.log xhr.responseText
         wechat_notice('上传失败')

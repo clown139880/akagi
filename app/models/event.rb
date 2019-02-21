@@ -44,7 +44,7 @@ class Event < ApplicationRecord
   end
 
   def get_owner_name
-    self.user ? self.user.name : 'admin'
+    self.user ? self.user.name : '麻倉月轩'
   end
 
   def get_avatar

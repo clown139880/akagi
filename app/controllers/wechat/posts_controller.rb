@@ -9,16 +9,22 @@ class Wechat::PostsController < Wechat::BaseController
     @post = @event.posts.build(nickname: Settings.nicknames.sample, types:3)
   end
 
+  def edit
+    @oss_uploader = OssUploader.new
+    @post = Post.find_by(id: params[:id])
+    @event = @post.event
+  end
+
+  def update
+    @post = Post.find_by(id: params[:id])
+    @post.update_attributes post_param
+    redirect_to [:wechat,  @post.event]
+  end
+
   def create
     @post = @event.posts.build post_param
     #TODO 当前用户
     @post.user = User.first
-    if @post.photos
-      @post.photos.each do |photo|
-        md = '  ![](' + photo.url + ')'
-        @post.content = @post.content + md
-      end
-    end
     if @post.save!
       redirect_to [:wechat,  @event]
     else
