@@ -40,7 +40,7 @@ class Event < ApplicationRecord
   end
 
   def logo
-    self.photos.logo.first ? self.photos.logo.first.url : ''
+    self.photos.logo.first ? self.photos.logo.first.url : 'http://akagi.oss-cn-hangzhou.aliyuncs.com/blog/201902/1550723498000.jpg'
   end
 
   def get_owner_name
