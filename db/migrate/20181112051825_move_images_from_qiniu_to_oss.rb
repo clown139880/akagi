@@ -7,10 +7,10 @@ class MoveImagesFromQiniuToOss < ActiveRecord::Migration[5.2]
     add_column :photos, :key, :string, limit: 150, :after => 'id'
     #oes1t3t81 phv6tif06
     puts'「我要开始导出数据了」'
-    posts = Post.where('content like "%http://oes1t3t81.bkt.clouddn.com%"')
+    posts = Post.where('content like "%http://phv6tif06.bkt.clouddn.com%"')
     urls = []
     posts.each do |post|
-      urls += post.content.scan(/http:\/\/oes1t3t81\.bkt\.clouddn\.com[^\)]+(?:\))/).map do |url|
+      urls += post.content.scan(/http:\/\/phv6tif06\.bkt\.clouddn\.com[^\)]+(?:\))/).map do |url|
         Photo.new({
           url: url[0..-2],
           created_at: post.updated_at,
