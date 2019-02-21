@@ -1,7 +1,7 @@
 class Wechat::PostsController < Wechat::BaseController
 
   #before_action :log_in
-  before_action :set_event
+  before_action :set_event, only:[:new, :create, :more]
 
 
   def new
@@ -18,7 +18,7 @@ class Wechat::PostsController < Wechat::BaseController
   def update
     @post = Post.find_by(id: params[:id])
     @post.update_attributes post_param
-    redirect_to [:wechat,  @post.event]
+    redirect_to [:wechat, @post.event]
   end
 
   def create
@@ -26,7 +26,7 @@ class Wechat::PostsController < Wechat::BaseController
     #TODO 当前用户
     @post.user = User.first
     if @post.save!
-      redirect_to [:wechat,  @event]
+      redirect_to [:wechat, @event]
     else
       #获取错误信息
       @post.errors.full_messages
