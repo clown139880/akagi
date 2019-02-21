@@ -1,10 +1,9 @@
 /*
  *= require_self
- *= require ./cpanel/style
+ *= require_tree ./cpanel
  *= require bootstrap-tagsinput
- *=require bootstrap 
- *=require ionicons 
- *=require iCheck/all 
-*=require datatables/dataTables.bootstrap
- *=require admin-lte
+ *= require bootstrap 
+ *= require ionicons 
+ *= require iCheck/all 
+ *= require admin-lte
  */
