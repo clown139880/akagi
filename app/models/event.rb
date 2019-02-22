@@ -52,7 +52,8 @@ class Event < ApplicationRecord
   end
 
   def get_logo
-    self.photos.empty? ? Settings.default_event_logo : self.photos.logo.first ? self.photos.logo.first.url : self.photos.last.url
+    url = self.photos.empty? ? Settings.default_event_logo : self.photos.logo.first ? self.photos.logo.first.url : self.photos.last.url
+    url + '!small'
   end
 
 end
