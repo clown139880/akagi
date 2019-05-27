@@ -7,8 +7,8 @@ defaults: &defaults
 # App end
 
   nicknames: ['吉良吉影', '东方仗助', '空条承太郎', '夏亚', '卡谬', '达比', '武藤游戏']
-  wechat_appid:      "wxcc900f59b83468b7"
-  wechat_appsecret:  "3dc3013e776ceffd2254b59e07d555aa"
+  wechat_appid:      ""
+  wechat_appsecret:  ""
 
 # Redis config start
   redis_host: localhost
@@ -17,10 +17,14 @@ defaults: &defaults
 # Redis end
 
 # OSS
-  end_point: 'https://akagi.oss-cn-hangzhou.aliyuncs.com/'
+  oss_access_key: '' 
+  oss_secret_key: ''
+  oss_bucket: ''
+  oss_host: ''
+  end_point: ''
 #
 
-  default_event_logo: 'http://phv6tif06.bkt.clouddn.com//blog/1511962137717.JPG'
+  default_event_logo: ''
 development:
   <<: *defaults
   visit_url: 'http://192.168.4.146:3000'

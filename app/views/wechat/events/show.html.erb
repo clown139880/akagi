@@ -74,7 +74,7 @@
 <script type="text/javascript">
   wx.ready(function () {
     wx.onMenuShareAppMessage({title: "<%= @event.title %>", desc: "<%= wechat_desc_for_event(@event) %>", link: "<%= Settings.visit_url %>/wechat/events/<%= @event.id %>", imgUrl: "<%= @event.logo %>", success: function () {}});
-    wx.onMenuShareTimeline({title: "<%= @event.title %>", link: "<%= Settings.visit_url %>/wechat/events/<%= @event.id %>", imgUrl: "<%= @event.logo %>", success: function () {}});
+    wx.onMenuShareTimeline({title: "<%= @event.title %>", link: "<%= Settings.visit_url %>/wechat/events/<%= @event.id %>", imgUrl: "<%= @event.logo %>!200x200", success: function () {}});
   });
 
   wx.error(function (res) {

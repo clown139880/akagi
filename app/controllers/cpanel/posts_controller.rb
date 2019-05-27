@@ -9,23 +9,27 @@ class Cpanel::PostsController < Cpanel::BaseController
 	def new
 		@events = Event.all
 		@post = Post.new
+    @oss_uploader = OssUploader.new
 	end
 
   def create
     @post = User.first.posts.build post_params
     if @post.save
-      @post.event.update_attribute(:updated_at,Time.zone.now)
+      @post.event.update_attribute(:updated_at, Time.zone.now)
       if params[:is_share] == "1"
         weibo_share @post
       end
-      flash[:success] = "发表成功!"
+			flash[:success] = "发表成功!"
+    	redirect_to [:cpanel, :posts]
     else
-      flash[:notice] = "失败!"
+			flash[:notice] = "失败!"
+			@events = Event.all
+			render new
     end
-    redirect_to [:cpanel, :posts]
   end
 
 	def edit
+    @oss_uploader = OssUploader.new
 	end
 
 	def update
@@ -59,7 +63,7 @@ class Cpanel::PostsController < Cpanel::BaseController
 
   private
   def post_params
-    params.require(:post).permit(:title, :content, :picture, :event_id, :tag_list, photos_attributes:[:image])
+    params.require(:post).permit(:title, :content, :picture, :event_id, :tag_list, photos_attributes:[:url])
   end
 
 	def set_post

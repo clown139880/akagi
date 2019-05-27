@@ -51,9 +51,8 @@ class Event < ApplicationRecord
     self.user ? self.user.avatar : 'http://tvax4.sinaimg.cn/crop.136.1.388.388.1024/6490ca36ly8flf7tqek7fj20go0gk0w7.jpg'
   end
 
-  def get_logo
-    url = self.photos.empty? ? Settings.default_event_logo : self.photos.logo.first ? self.photos.logo.first.url : self.photos.last.url
-    url + '!small'
+  def get_logo(style = 'small')
+    url = self.photos.empty? ? Settings.default_event_logo : (self.photos.logo.first ? self.photos.logo.first.url(style) : self.photos.last.url(style))
   end
 
 end

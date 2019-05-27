@@ -35,3 +35,4 @@ nginx/log/*
 
 config/global_conf.yml
 config/database.yml
+config/global_conf.yml

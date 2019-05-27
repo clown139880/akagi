@@ -1,9 +1,8 @@
 <tr>
+  <td><%= image_tag event.get_logo('200x200'), style:"width: 100px", class:"img-responsive", id:"logo_preview" %></td>
   <td><%= event.title %></td>
-  <td><%= event.created_at.strftime('%Y-%m-%d') %></td>
-  <td><%= event.get_started %></td>
-  <td><%= event.get_ended %></td>
-  <td><%= event.place %></td>
+  <td><%= event.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
+  <td><%= event.updated_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
   <td>
     <%= link_to '', [:edit, :cpanel, event], class:'cm-edit', title: '点击编辑' %> |
     <%= link_to '', [:cpanel, event], method: :delete, data: { confirm: '确认删除' }, class: 'cm-close', title: '点击删除' %>

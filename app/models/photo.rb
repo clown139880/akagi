@@ -6,8 +6,8 @@ class Photo < ApplicationRecord
 
   before_save :set_key
 
-  def url
-    self.key ? Settings.end_point + self.key : self.origin_url
+  def url(style = 'small')
+    self.key ? Settings.end_point + self.key + '!' + style : self.origin_url
   end
 
   def origin_url

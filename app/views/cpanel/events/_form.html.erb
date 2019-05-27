@@ -23,8 +23,8 @@
       <div class="form-group">
         <label class="col-sm-2 control-label">LOGO</label>
         <div class="col-sm-8" >
-          <%= f.text_field :logo, value: event.logo, class: 'form-control'  %>
-          <%= image_tag event.logo, class:"img-responsive", id:"logo_preview" %>
+          <%= f.text_field :logo, value: event.get_logo, class: 'form-control'  %>
+          <%= image_tag event.get_logo, class:"img-responsive", id:"logo_preview" %>
         </div>
       </div>
       <div class="form-group">

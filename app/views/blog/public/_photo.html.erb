@@ -35,16 +35,21 @@
             </div>
         <script>
         $("#smfile").fileinput({
-            uploadUrl: 'http://up.qiniu.com',
-            uploadExtraData: { token: "<%= get_upload_token() %>" },
+            uploadUrl: '<%= @oss_uploader.bucket_endpoint %>',
+            uploadExtraData: { 
+                key:"<%=  (Rails.env.production? ? '' : 'dev/') + @oss_uploader.key %>"  + Date.parse(new Date()) + '.jpg',
+                Signature:"<%= @oss_uploader.signature %>",
+                policy :"<%= @oss_uploader.policy %>",
+                OSSAccessKeyId: "<%= @oss_uploader.access_key %>",
+            },
             allowedFileExtensions : ['jpeg', 'jpg', 'png', 'gif', 'bmp'],
             overwriteInitial: false,
             maxFilesNum: 10,
         });
         $('#smfile').on('fileuploaded', function(event, data, previewId, index) {
             var form = data.form, files = data.files, extra = data.extra, response = data.response, reader = data.reader;
-            photo = 'http://oes1t3t81.bkt.clouddn.com/' + response.key;
-            if(response.key != '') {
+            photo = '<%= @oss_uploader.bucket_endpoint %>' + data.extra.key;
+            if(data.extra.key) {
                 Editor.cm.replaceSelection("!["+ files[index].name +"](" + photo + ")" + "\n");
                 var input = document.createElement('input')
                 input.name = 'post[photos_attributes][' + index + '][image]'
@@ -58,7 +63,7 @@
                     $('#markdown').append("!["+ files[index].name +"](" + photo + ")" + "\n");
                     //$('#deletecode').append(response.data.delete + "\n");
 
-                } else if (response.key != '') {
+                } else if (data.extra.key != '') {
                     $("#showurl").show();
                     $('#urlcode').append(photo + "\n");
                     $('#htmlcode').append("&lt;img src=\""+ photo +"\" alt=\""+ files[index].name +"\" title=\""+ files[index].name +"\" /&gt;" + "\n");
