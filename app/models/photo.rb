@@ -20,6 +20,6 @@ class Photo < ApplicationRecord
   end
 
   def url_small
-    self.key ? self.url + '!200x200' : self.origin_url
+    self.url('200x200')
   end
 end
