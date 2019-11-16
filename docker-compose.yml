@@ -51,7 +51,23 @@ services:
       - web
     volumes:
       - ./nginx/log:/var/log/nginx
+      - ./nginx/sites:/etc/nginx/conf.d
     links:
       - web:web
     depends_on:
       - web
+      - go_app
+
+  # golang app part. It depends on the rails_app to initialize the database
+  go_app:
+    build: ./go_app
+    volumes:
+      - ./go_app:/root
+    command: realize start
+    environment:
+      # Gin webserver run mode. Or "debug" for debugging
+      - GIN_MODE=release
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db

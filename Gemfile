@@ -1,9 +1,9 @@
 # if ENV["dev"]
 #   # source 'http://ruby.taobao.org'
-#   source 'https://ruby.taobao.org/'
+   source 'https://gems.ruby-china.com/'
 # else
 #source 'https://rubygems.org'
-source 'http://rubygems.org'
+#source 'http://rubygems.org'
 # end
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails',  '> 5.2'
@@ -71,6 +71,9 @@ gem 'acts-as-taggable-on', '> 4.0' #标签
 gem 'bootstrap-tagsinput-rails' #标签
 gem 'yajl-ruby', '> 1.3.1' #github安全提示
 gem 'solargraph'
+
+#let's go
+gem 'go-on-rails', '~> 0.3.1'
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record
