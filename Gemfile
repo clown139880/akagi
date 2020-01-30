@@ -72,9 +72,6 @@ gem 'bootstrap-tagsinput-rails' #标签
 gem 'yajl-ruby', '> 1.3.1' #github安全提示
 gem 'solargraph'
 
-#let's go
-gem 'go-on-rails', '~> 0.4.0'
-
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem 'byebug', '9.0.0', platform: :mri
@@ -88,6 +85,8 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring', '> 1.7.2'
   gem 'spring-watcher-listen','> 2.0.0'
+  #let's go
+  gem 'go-on-rails', '~> 0.4.0'
 end
 
 group :test do

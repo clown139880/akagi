@@ -261,7 +261,7 @@ GEM
     github-markdown (0.6.9)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    go-on-rails (0.3.1)
+    go-on-rails (0.4.0)
     guard (2.14.2)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -522,7 +522,6 @@ DEPENDENCIES
   font-awesome-rails
   gemoji (> 2.0)
   github-markdown (> 0.5)
-  go-on-rails (~> 0.3.1)
   guard (> 2.13.0)
   guard-minitest (> 2.4.4)
   html-pipeline
