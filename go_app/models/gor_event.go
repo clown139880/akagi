@@ -1,5 +1,3 @@
-
-
 // Package models includes the functions on the model Event.
 package models
 
@@ -20,23 +18,23 @@ func init() {
 }
 
 type Event struct {
-	Id int64 `json:"id,omitempty" db:"id" valid:"-"`
-Title string `json:"title,omitempty" db:"title" valid:"-"`
-Content string `json:"content,omitempty" db:"content" valid:"-"`
-UserId int64 `json:"user_id,omitempty" db:"user_id" valid:"-"`
-CreatedAt time.Time `json:"created_at,omitempty" db:"created_at" valid:"-"`
-UpdatedAt time.Time `json:"updated_at,omitempty" db:"updated_at" valid:"-"`
-Level int64 `json:"level,omitempty" db:"level" valid:"-"`
-ParentId int64 `json:"parent_id,omitempty" db:"parent_id" valid:"-"`
-Nickname string `json:"nickname,omitempty" db:"nickname" valid:"-"`
-Types int64 `json:"types,omitempty" db:"types" valid:"-"`
-StartedAt time.Time `json:"started_at,omitempty" db:"started_at" valid:"-"`
-EndedAt time.Time `json:"ended_at,omitempty" db:"ended_at" valid:"-"`
-Status int64 `json:"status,omitempty" db:"status" valid:"-"`
-Place string `json:"place,omitempty" db:"place" valid:"-"`
-Photos []Photo `json:"photos,omitempty" db:"photos" valid:"-"`
-Posts []Post `json:"posts,omitempty" db:"posts" valid:"-"`
-User User `json:"user,omitempty" db:"user" valid:"-"`
+	Id        int64     `json:"id,omitempty" db:"id" valid:"-"`
+	Title     string    `json:"title,omitempty" db:"title" valid:"-"`
+	Content   string    `json:"content,omitempty" db:"content" valid:"-"`
+	UserId    int64     `json:"user_id,omitempty" db:"user_id" valid:"-"`
+	CreatedAt time.Time `json:"created_at,omitempty" db:"created_at" valid:"-"`
+	UpdatedAt time.Time `json:"updated_at,omitempty" db:"updated_at" valid:"-"`
+	Level     int64     `json:"level,omitempty" db:"level" valid:"-"`
+	ParentId  int64     `json:"parent_id,omitempty" db:"parent_id" valid:"-"`
+	Nickname  string    `json:"nickname,omitempty" db:"nickname" valid:"-"`
+	Types     int64     `json:"types,omitempty" db:"types" valid:"-"`
+	StartedAt time.Time `json:"started_at,omitempty" db:"started_at" valid:"-"`
+	EndedAt   time.Time `json:"ended_at,omitempty" db:"ended_at" valid:"-"`
+	Status    int64     `json:"status,omitempty" db:"status" valid:"-"`
+	Place     string    `json:"place,omitempty" db:"place" valid:"-"`
+	Photos    []Photo   `json:"photos,omitempty" db:"photos" valid:"-"`
+	Posts     []Post    `json:"posts,omitempty" db:"posts" valid:"-"`
+	User      User      `json:"user,omitempty" db:"user" valid:"-"`
 }
 
 // DataStruct for the pagination
@@ -69,7 +67,7 @@ func (_p *EventPage) Current() ([]Event, error) {
 	whereStr := fmt.Sprintf("%s %s %s LIMIT %v", _p.WhereString, idStr, _p.orderStr, _p.PerPage)
 	whereParams := []interface{}{}
 	whereParams = append(append(whereParams, _p.WhereParams...), idParams...)
-	events, err := FindEventsWhere(whereStr, whereParams...)
+	events, err := EventIncludesWhere(append([]string{}, "photos"), whereStr, whereParams...)
 	if err != nil {
 		return nil, err
 	}
@@ -98,14 +96,14 @@ func (_p *EventPage) Previous() ([]Event, error) {
 	whereStr := fmt.Sprintf("%s %s %s LIMIT %v", _p.WhereString, idStr, _p.orderStr, _p.PerPage)
 	whereParams := []interface{}{}
 	whereParams = append(append(whereParams, _p.WhereParams...), idParams...)
-	events, err := FindEventsWhere(whereStr, whereParams...)
+	events, err := EventIncludesWhere(append([]string{}, "photos"), whereStr, whereParams...)
 	if err != nil {
 		return nil, err
 	}
 	if len(events) != 0 {
 		_p.FirstId, _p.LastId = events[0].Id, events[len(events)-1].Id
 	}
-	_p.PageNum -= 1
+	_p.PageNum--
 	return events, nil
 }
 
@@ -128,14 +126,14 @@ func (_p *EventPage) Next() ([]Event, error) {
 	whereStr := fmt.Sprintf("%s %s %s LIMIT %v", _p.WhereString, idStr, _p.orderStr, _p.PerPage)
 	whereParams := []interface{}{}
 	whereParams = append(append(whereParams, _p.WhereParams...), idParams...)
-	events, err := FindEventsWhere(whereStr, whereParams...)
+	events, err := EventIncludesWhere(append([]string{}, "photos"), whereStr, whereParams...)
 	if err != nil {
 		return nil, err
 	}
 	if len(events) != 0 {
 		_p.FirstId, _p.LastId = events[0].Id, events[len(events)-1].Id
 	}
-	_p.PageNum += 1
+	_p.PageNum++
 	return events, nil
 }
 
@@ -219,7 +217,6 @@ func (_p *EventPage) buildPageCount() error {
 	return nil
 }
 
-
 // FindEvent find a single event by an ID.
 func FindEvent(id int64) (*Event, error) {
 	if id == 0 {
@@ -291,7 +288,7 @@ func FindEvents(ids ...int64) ([]Event, error) {
 	idsHolder := strings.Repeat(",?", len(ids)-1)
 	sql := DB.Rebind(fmt.Sprintf(`SELECT COALESCE(events.title, '') AS title, COALESCE(events.content, '') AS content, COALESCE(events.user_id, 0) AS user_id, COALESCE(events.level, 0) AS level, COALESCE(events.parent_id, 0) AS parent_id, COALESCE(events.nickname, '') AS nickname, COALESCE(events.types, 0) AS types, COALESCE(events.started_at, CONVERT_TZ('0001-01-01 00:00:00','+00:00','UTC')) AS started_at, COALESCE(events.ended_at, CONVERT_TZ('0001-01-01 00:00:00','+00:00','UTC')) AS ended_at, COALESCE(events.status, 0) AS status, COALESCE(events.place, '') AS place, events.id, events.created_at, events.updated_at FROM events WHERE events.id IN (?%s)`, idsHolder))
 	idsT := []interface{}{}
-	for _,id := range ids {
+	for _, id := range ids {
 		idsT = append(idsT, interface{}(id))
 	}
 	err := DB.Select(&_events, sql, idsT...)
@@ -387,31 +384,31 @@ func EventIncludesWhere(assocs []string, sql string, args ...interface{}) (_even
 	idsHolder := strings.Repeat(",?", len(ids)-1)
 	for _, assoc := range assocs {
 		switch assoc {
-				case "photos":
-						// FIXME: optimize the query
-						for i, vvv := range  _events {
-							_photos, err := EventGetPhotos(vvv.Id)
-							if err != nil {
-								continue
-							}
-							vvv.Photos = _photos
-						    _events[i] = vvv
-						}
-				case "posts":
-							where := fmt.Sprintf("event_id IN (?%s)", idsHolder)
-						_posts, err := FindPostsWhere(where, ids...)
-						if err != nil {
-							log.Printf("Error when query associated objects: %v\n", assoc)
-							continue
-						}
-						for _, vv := range _posts {
-							for i, vvv := range  _events {
-									if vv.EventId == vvv.Id {
-										vvv.Posts = append(vvv.Posts, vv)
-									}
-								_events[i].Posts = vvv.Posts
-						    }
-					    }
+		case "photos":
+			// FIXME: optimize the query
+			for i, vvv := range _events {
+				_photos, err := EventGetPhotos(vvv.Id)
+				if err != nil {
+					continue
+				}
+				vvv.Photos = _photos
+				_events[i] = vvv
+			}
+		case "posts":
+			where := fmt.Sprintf("event_id IN (?%s)", idsHolder)
+			_posts, err := FindPostsWhere(where, ids...)
+			if err != nil {
+				log.Printf("Error when query associated objects: %v\n", assoc)
+				continue
+			}
+			for _, vv := range _posts {
+				for i, vvv := range _events {
+					if vv.EventId == vvv.Id {
+						vvv.Posts = append(vvv.Posts, vv)
+					}
+					_events[i].Posts = vvv.Posts
+				}
+			}
 		}
 	}
 	return _events, nil
@@ -569,8 +566,8 @@ func (_event *Event) Create() (int64, error) {
 	t := time.Now()
 	_event.CreatedAt = t
 	_event.UpdatedAt = t
-    sql := `INSERT INTO events (title,content,user_id,created_at,updated_at,level,parent_id,nickname,types,started_at,ended_at,status,place) VALUES (:title,:content,:user_id,:created_at,:updated_at,:level,:parent_id,:nickname,:types,:started_at,:ended_at,:status,:place)`
-    result, err := DB.NamedExec(sql, _event)
+	sql := `INSERT INTO events (title,content,user_id,created_at,updated_at,level,parent_id,nickname,types,started_at,ended_at,status,place) VALUES (:title,:content,:user_id,:created_at,:updated_at,:level,:parent_id,:nickname,:types,:started_at,:ended_at,:status,:place)`
+	result, err := DB.NamedExec(sql, _event)
 	if err != nil {
 		log.Println(err)
 		return 0, err
@@ -585,9 +582,9 @@ func (_event *Event) Create() (int64, error) {
 
 // PhotosCreate is used for Event to create the associated objects Photos
 func (_event *Event) PhotosCreate(am map[string]interface{}) error {
-		am["photoable_id"] = _event.Id
-		am["photoable_type"] = "Event"
-		_, err := CreatePhoto(am)
+	am["photoable_id"] = _event.Id
+	am["photoable_type"] = "Event"
+	_, err := CreatePhoto(am)
 	return err
 }
 
@@ -598,21 +595,21 @@ func (_event *Event) GetPhotos() error {
 	_photos, err := EventGetPhotos(_event.Id)
 	if err == nil {
 		_event.Photos = _photos
-    }
-    return err
+	}
+	return err
 }
 
 // EventGetPhotos a helper fuction used to get associated objects for EventIncludesWhere().
 func EventGetPhotos(id int64) ([]Photo, error) {
-		where := `photoable_type = "Event" AND photoable_id = ?`
-		_photos, err := FindPhotosWhere(where, id)
+	where := `photoable_type = "Event" AND photoable_id = ?`
+	_photos, err := FindPhotosWhere(where, id)
 	return _photos, err
 }
 
 // PostsCreate is used for Event to create the associated objects Posts
 func (_event *Event) PostsCreate(am map[string]interface{}) error {
-			am["event_id"] = _event.Id
-		_, err := CreatePost(am)
+	am["event_id"] = _event.Id
+	_, err := CreatePost(am)
 	return err
 }
 
@@ -623,17 +620,15 @@ func (_event *Event) GetPosts() error {
 	_posts, err := EventGetPosts(_event.Id)
 	if err == nil {
 		_event.Posts = _posts
-    }
-    return err
+	}
+	return err
 }
 
 // EventGetPosts a helper fuction used to get associated objects for EventIncludesWhere().
 func EventGetPosts(id int64) ([]Post, error) {
-			_posts, err := FindPostsBy("event_id", id)
+	_posts, err := FindPostsBy("event_id", id)
 	return _posts, err
 }
-
-
 
 // CreateUser is a method for a Event object to create an associated User record.
 func (_event *Event) CreateUser(am map[string]interface{}) error {
@@ -677,7 +672,7 @@ func DestroyEvents(ids ...int64) (int64, error) {
 	idsHolder := strings.Repeat(",?", len(ids)-1)
 	sql := fmt.Sprintf(`DELETE FROM events WHERE id IN (?%s)`, idsHolder)
 	idsT := []interface{}{}
-	for _,id := range ids {
+	for _, id := range ids {
 		idsT = append(idsT, interface{}(id))
 	}
 	stmt, err := DB.Preparex(DB.Rebind(sql))
@@ -734,11 +729,11 @@ func destroyEventAssociations(ids ...int64) {
 	var err error
 	// make sure no declared-and-not-used exception
 	_, _, _ = idsHolder, idsT, err
-								where := fmt.Sprintf("event_id IN (?%s)", idsHolder)
-							_, err = DestroyPostsWhere(where, idsT...)
-							if err != nil {
-								log.Printf("Destroy associated object %s error: %v\n", "Posts", err)
-							}
+	where := fmt.Sprintf("event_id IN (?%s)", idsHolder)
+	_, err = DestroyPostsWhere(where, idsT...)
+	if err != nil {
+		log.Printf("Destroy associated object %s error: %v\n", "Posts", err)
+	}
 }
 
 // Save method is used for a Event object to update an existed record mainly.
@@ -760,8 +755,8 @@ func (_event *Event) Save() error {
 	_event.UpdatedAt = time.Now()
 	sqlFmt := `UPDATE events SET %s WHERE id = %v`
 	sqlStr := fmt.Sprintf(sqlFmt, "title = :title, content = :content, user_id = :user_id, updated_at = :updated_at, level = :level, parent_id = :parent_id, nickname = :nickname, types = :types, started_at = :started_at, ended_at = :ended_at, status = :status, place = :place", _event.Id)
-    _, err = DB.NamedExec(sqlStr, _event)
-    return err
+	_, err = DB.NamedExec(sqlStr, _event)
+	return err
 }
 
 // UpdateEvent is used to update a record with a id and map[string]interface{} typed key-value parameters.
@@ -773,7 +768,7 @@ func UpdateEvent(id int64, am map[string]interface{}) error {
 	keys := allKeys(am)
 	sqlFmt := `UPDATE events SET %s WHERE id = %v`
 	setKeysArr := []string{}
-	for _,v := range keys {
+	for _, v := range keys {
 		s := fmt.Sprintf(" %s = :%s", v, v)
 		setKeysArr = append(setKeysArr, s)
 	}

@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	// you can import models
+	//m "../models"
 )
 
 func HomeHandler(c *gin.Context) {
@@ -21,7 +23,7 @@ func HomeHandler(c *gin.Context) {
 		GolangVer    string
 	}
 
-	gorVer := "we changed the title"
+	gorVer := "0.4.0"
 	golangVer := "Failed to get"
 
 	envs := Envs{GoOnRailsVer: gorVer, GolangVer: golangVer}

@@ -73,7 +73,7 @@ gem 'yajl-ruby', '> 1.3.1' #github安全提示
 gem 'solargraph'
 
 #let's go
-gem 'go-on-rails', '~> 0.3.1'
+gem 'go-on-rails', '~> 0.4.0'
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record

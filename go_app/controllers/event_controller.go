@@ -5,6 +5,7 @@ import (
 	"log"
 	m "main/models"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	// you can import models
@@ -20,16 +21,35 @@ func EventHandler(c *gin.Context) {
 	// 	u = []byte("Get data error!")
 	// }
 
-	events, err := m.AllEvents()
-	if err != nil {
-		msg := fmt.Sprintf("Get post index error: %v", err)
-		c.JSON(http.StatusOK, BuildResp("400", msg, nil))
-		return
+	// GET /posts
+	/* 		posts, err := m.LastPosts(10)
+	   		if err != nil {
+	   			msg := fmt.Sprintf("Get post index error: %v", err)
+	   			c.JSON(http.StatusOK, BuildResp("400", msg, nil))
+	   			return
+	   		}
+	   		resp := BuildResp("200", "Get post index success", posts)
+	   		c.JSON(http.StatusOK, resp) */
+
+	lastId, _ := strconv.ParseInt(c.Query("last_id"), 10, 64)
+	fmt.Print(lastId)
+	pp := &m.EventPage{
+		Order:   map[string]string{"id": "desc"},
+		LastId:  lastId,
+		PerPage: 20,
 	}
+
+	direction := "current"
+	if lastId > 0 {
+		direction = "next"
+	}
+
+	ps, err := pp.GetPage(direction)
+	fmt.Print(err)
 
 	c.JSON(200, gin.H{
 		"status": "success",
-		"data":   events,
+		"data":   ps,
 	})
 }
 

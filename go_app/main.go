@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+
 	c "main/controllers"
 
 	"github.com/gin-contrib/cors"
@@ -30,6 +31,12 @@ func main() {
 	r.POST("/posts", c.CreatePost)
 	r.GET("/post/:id", c.ShowPost)
 	r.PUT("/post/:id", c.ShowPost)
+	v1 := r.Group("/api/v1/weights")
+	{
+		v1.GET("/", c.FetchAllWeight)
+		v1.POST("/", c.CreateWeight)
+		v1.GET("/:id", c.FetchSingleWeight)
+	}
 
 	// Let's start the server
 	r.Run(":" + *servePort)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_12_051825) do
+ActiveRecord::Schema.define(version: 2020_01_27_102812) do
 
   create_table "caseships", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "father_id"
@@ -131,6 +131,14 @@ ActiveRecord::Schema.define(version: 2018_11_12_051825) do
     t.string "weixin_openid"
     t.string "avatar"
     t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
+  create_table "weight_logs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.decimal "weight", precision: 10
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "created_at"], name: "index_weight_logs_on_user_id_and_created_at"
   end
 
   add_foreign_key "events", "users"
