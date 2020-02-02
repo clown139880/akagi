@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	m "main/models"
+	mm "main/src/models"
 	"net/http"
 	"strconv"
 
@@ -51,6 +52,34 @@ func PostHandler(c *gin.Context) {
 		"status": "success",
 		"data":   ps,
 	})
+}
+
+// FetchAllPost 获取所有的post
+func FetchAllPost(c *gin.Context) {
+	var posts []mm.Post
+	lastID, _ := strconv.ParseInt(c.Query("last_id"), 10, 64)
+	perPage, _ := strconv.ParseInt(c.Query("per_page"), 10, 64)
+	eventID, _ := strconv.ParseInt(c.Query("event_id"), 10, 64)
+	if perPage == 0 {
+		perPage = 8
+	}
+	query := mm.DB.Preload("Photos").Order("created_at desc").Limit(perPage)
+	log.Printf("lastID:%v", lastID)
+	log.Printf("eventID:%v", eventID)
+	if lastID > 0 {
+		query = query.Where("id < ?", lastID)
+	}
+	if eventID > 0 {
+		query = query.Where("event_id = ?", eventID)
+	}
+	query.Find(&posts)
+
+	if len(posts) <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No posts found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": posts})
 }
 
 func CreatePost(c *gin.Context) {

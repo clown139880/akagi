@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	m "main/models"
+	mm "main/src/models"
 	"net/http"
 	"strconv"
 
@@ -53,6 +54,35 @@ func EventHandler(c *gin.Context) {
 	})
 }
 
+// FetchAllEvent 获取所有的event
+func FetchAllEvent(c *gin.Context) {
+	var events []mm.Event
+	lastID, _ := strconv.ParseInt(c.Query("last_id"), 10, 64)
+	perPage, _ := strconv.ParseInt(c.Query("per_page"), 10, 64)
+	forSelect, _ := strconv.ParseBool(c.Query("for_select"))
+	if perPage == 0 {
+		perPage = 8
+	}
+	query := mm.DB
+	if !forSelect {
+		query = query.Preload("Photos").Order("created_at desc").Limit(perPage)
+	} else {
+		query = query.Order("created_at desc")
+	}
+	if lastID > 0 {
+		query = query.Where("id < ?", lastID)
+	}
+
+	query.Find(&events)
+
+	if len(events) <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No events found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": events})
+}
+
 func CreateEvent(c *gin.Context) {
 	var po m.Event
 	err := c.BindJSON(&po)
@@ -77,14 +107,15 @@ func ShowEvent(c *gin.Context) {
 		c.JSON(http.StatusOK, BuildResp("400", "Parsing id error!", nil))
 		return
 	}
-	post, err := m.FindEvent(id)
-	if err != nil {
-		msg := fmt.Sprintf("Get post error: %v", err)
-		c.JSON(http.StatusOK, BuildResp("400", msg, nil))
+	var event mm.Event
+	mm.DB.Preload("Photos").Find(&event, id)
+	//mm.DB.Model(&event).Related("Photos")
+	if event.ID == 0 {
+		msg := fmt.Sprintf("Get post error: %v", 404)
+		c.JSON(http.StatusOK, BuildResp("404", msg, nil))
 		return
 	}
-	post.GetPhotos()
-	resp := BuildResp("200", "Get post success", post)
+	resp := BuildResp("200", "Get post success", event)
 	c.JSON(http.StatusOK, resp)
 }
 

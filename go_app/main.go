@@ -31,11 +31,21 @@ func main() {
 	r.POST("/posts", c.CreatePost)
 	r.GET("/post/:id", c.ShowPost)
 	r.PUT("/post/:id", c.ShowPost)
-	v1 := r.Group("/api/v1/weights")
+	v1 := r.Group("/api/v1")
 	{
-		v1.GET("/", c.FetchAllWeight)
-		v1.POST("/", c.CreateWeight)
-		v1.GET("/:id", c.FetchSingleWeight)
+		v1.GET("/weights/", c.FetchAllWeight)
+		v1.POST("/weights/", c.CreateWeight)
+		v1.GET("/weight/:id", c.FetchSingleWeight)
+
+		v1.GET("/photos/", c.FetchAllPhoto)
+		v1.GET("/photo/:id", c.FetchSinglePhoto)
+
+		v1.GET("/posts/", c.FetchAllPost)
+		v1.POST("/posts/", c.CreatePost)
+		v1.GET("/post/:id", c.ShowPost)
+
+		v1.GET("/events/", c.FetchAllEvent)
+		v1.GET("/event/:id", c.ShowEvent)
 	}
 
 	// Let's start the server

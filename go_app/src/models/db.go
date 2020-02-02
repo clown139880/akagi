@@ -14,6 +14,7 @@ func init() {
 	if err != nil {
 		panic("failed to connect database")
 	}
+	DB.LogMode(true)
 	//Migrate the schema
-	DB.AutoMigrate(&WeightLog{})
+	//DB.AutoMigrate(&WeightLog{})
 }
