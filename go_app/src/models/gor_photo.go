@@ -4,7 +4,7 @@ package models
 import (
 	"log"
 	time "main/src/time"
-	"strings"
+	"os"
 )
 
 // set flags to output more detailed log
@@ -15,9 +15,10 @@ func init() {
 // Photo 图片
 type Photo struct {
 	ID            int64          `json:"id,omitempty" db:"id" valid:"-"`
-	Key           string         `json:"key,omitempty" db:"key" valid:"-"`
+	Key           string         `json:"-" db:"key" valid:"-"`
 	IsLogo        bool           `json:"is_logo,omitempty" db:"is_logo" valid:"-"`
-	URL           string         `json:"url,omitempty" db:"url" valid:"-"`
+	URL           string         `gorm:"-" json:"url,omitempty" valid:"-"`
+	OriginURL     string         `gorm:"column:url" json:"-"  valid:"-"`
 	PhotoableID   int64          `json:"photoable_id,omitempty" db:"photoable_id" valid:"-"`
 	PhotoableType string         `json:"photoable_type,omitempty" db:"photoable_type" valid:"-"`
 	CreatedAt     time.TimeStamp `json:"created_at,omitempty" db:"created_at" valid:"-"`
@@ -26,8 +27,10 @@ type Photo struct {
 
 // AfterFind 为图片提供缩略图
 func (p *Photo) AfterFind() (err error) {
-	if strings.Contains(p.URL, "oss") {
-		p.URL += "!small"
+	if p.Key != "" {
+		p.URL = os.Getenv("END_POINT") + p.Key + "!small"
+	} else {
+		p.URL = p.OriginURL
 	}
 	return
 }

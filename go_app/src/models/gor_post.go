@@ -4,6 +4,10 @@ package models
 import (
 	"log"
 	time "main/src/time"
+	utils "main/src/utils"
+	"os"
+	"regexp"
+	"strings"
 )
 
 // set flags to output more detailed log
@@ -28,4 +32,44 @@ type Post struct {
 	User       *User          `json:"user,omitempty" db:"user" valid:"-"`
 	Event      *Event         `json:"event,omitempty" db:"event" valid:"-"`
 	Photos     []Photo        `gorm:"auto_preload;polymorphic:Photoable;polymorphic_value:Post" json:"photos,omitempty" db:"photos" valid:"-"`
+}
+
+// AfterFind 为图片提供缩略图
+func (p *Post) AfterFind() (err error) {
+	for _, photo := range p.Photos {
+		p.Content = strings.ReplaceAll(p.Content, photo.OriginURL, photo.URL)
+	}
+	return
+}
+
+// BeforeSave 在保存前处理图片
+func (p *Post) BeforeSave() (err error) {
+	re, _ := regexp.Compile(`!\[([^\]])+\]\(([^\)])+\)`)
+	reURL, _ := regexp.Compile(`http[^\)]+`)
+	for _, photoMarkDown := range re.FindAllString(p.Content, -1) {
+		photoURL := reURL.FindString(photoMarkDown)
+		//print(photoURL)
+		key := strings.Replace(photoURL, "https://akagi.oss-cn-hangzhou.aliyuncs.com/", "", 1)
+		//print(key)
+		var photo Photo
+		DB.Where("`key` = ?", key).Find(&photo)
+		if photo.ID == 0 {
+			//没有找到photos里面的记录
+			if strings.Contains(photoURL, "akagi.oss-cn-hangzhou.aliyuncs.com") {
+				photo.Key = key
+				photo.URL = photoURL
+				photo.PhotoableType = "Post"
+				photo.PhotoableID = p.ID
+				DB.Save(&photo)
+			} else {
+				photo.Key = utils.UploadFromURL(photoURL)
+				photo.PhotoableType = "Post"
+				photo.PhotoableID = p.ID
+				DB.Save(&photo)
+				p.Content = strings.ReplaceAll(p.Content, photoURL, os.Getenv("END_POINT")+photo.Key)
+			}
+		}
+	}
+	DB.Model(&p.Event).Where("id = ?", p.EventID).UpdateColumn("updated_at", time.Now())
+	return
 }

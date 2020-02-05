@@ -3,6 +3,8 @@ class Post < ApplicationRecord
   belongs_to :user
   belongs_to :event
 
+  @loaded = false 
+
   validates :content, presence:true
 
   has_many :photos, as: :photoable
@@ -21,10 +23,15 @@ class Post < ApplicationRecord
 
   def content
     raw = read_attribute(:content)
-    self.photos.map do |photo| 
-      raw.gsub! photo.origin_url, photo.url + '!small'
+    if @loaded 
+      return raw
+    else 
+      self.photos.map do |photo| 
+        raw.gsub! photo.origin_url, photo.url
+      end
+      @loaded = true
+      return raw
     end
-    return raw
   end
 
   def get_avatar

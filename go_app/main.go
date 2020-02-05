@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
@@ -26,11 +27,10 @@ func main() {
 	r.StaticFile("/favicon.ico", "./public/favicon.ico")
 	// Then we bind some route to some handler(controller action)
 	r.GET("/", c.HomeHandler)
-	r.GET("/posts", c.PostHandler)
-	r.GET("/events", c.EventHandler)
+	//r.GET("/posts", c.PostHandler)
 	r.POST("/posts", c.CreatePost)
 	r.GET("/post/:id", c.ShowPost)
-	r.PUT("/post/:id", c.ShowPost)
+
 	v1 := r.Group("/api/v1")
 	{
 		v1.GET("/weights/", c.FetchAllWeight)
@@ -43,6 +43,7 @@ func main() {
 		v1.GET("/posts/", c.FetchAllPost)
 		v1.POST("/posts/", c.CreatePost)
 		v1.GET("/post/:id", c.ShowPost)
+		v1.PUT("/post/:id", c.UpdatePost)
 
 		v1.GET("/events/", c.FetchAllEvent)
 		v1.GET("/event/:id", c.ShowEvent)

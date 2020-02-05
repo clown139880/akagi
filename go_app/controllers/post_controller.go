@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
-	m "main/models"
-	mm "main/src/models"
+	m "main/src/models"
 	"net/http"
 	"strconv"
 
@@ -12,58 +12,16 @@ import (
 	// you can import models
 )
 
-func PostHandler(c *gin.Context) {
-	// you can use model functions to do CRUD
-	//
-	// user, _ := m.FindUser(1)
-	// u, err := json.Marshal(user)
-	// if err != nil {
-	// 	log.Printf("JSON encoding error: %v\n", err)
-	// 	u = []byte("Get data error!")
-	// }
-
-	// GET /posts
-	/* 		posts, err := m.LastPosts(10)
-	   		if err != nil {
-	   			msg := fmt.Sprintf("Get post index error: %v", err)
-	   			c.JSON(http.StatusOK, BuildResp("400", msg, nil))
-	   			return
-	   		}
-	   		resp := BuildResp("200", "Get post index success", posts)
-	   		c.JSON(http.StatusOK, resp) */
-
-	lastId, _ := strconv.ParseInt(c.Query("last_id"), 10, 64)
-	fmt.Print(lastId)
-	pp := &m.PostPage{
-		Order:   map[string]string{"id": "desc"},
-		LastId:  lastId,
-		PerPage: 5,
-	}
-
-	direction := "current"
-	if lastId > 0 {
-		direction = "next"
-	}
-
-	ps, err := pp.GetPage(direction)
-	fmt.Print(err)
-
-	c.JSON(200, gin.H{
-		"status": "success",
-		"data":   ps,
-	})
-}
-
 // FetchAllPost 获取所有的post
 func FetchAllPost(c *gin.Context) {
-	var posts []mm.Post
+	var posts []m.Post
 	lastID, _ := strconv.ParseInt(c.Query("last_id"), 10, 64)
 	perPage, _ := strconv.ParseInt(c.Query("per_page"), 10, 64)
 	eventID, _ := strconv.ParseInt(c.Query("event_id"), 10, 64)
 	if perPage == 0 {
 		perPage = 8
 	}
-	query := mm.DB.Preload("Photos").Order("created_at desc").Limit(perPage)
+	query := m.DB.Preload("Photos").Order("created_at desc").Limit(perPage)
 	log.Printf("lastID:%v", lastID)
 	log.Printf("eventID:%v", eventID)
 	if lastID > 0 {
@@ -82,83 +40,73 @@ func FetchAllPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": posts})
 }
 
+// CreatePost 创建POST
 func CreatePost(c *gin.Context) {
-	var po m.Post
-	err := c.BindJSON(&po)
+	var post m.Post
+	err := c.BindJSON(&post)
 	if err != nil {
+		data, _ := ioutil.ReadAll(c.Request.Body)
+		log.Printf("c.Request.body: %v", string(data))
+		log.Println(err)
 		c.JSON(http.StatusOK, err)
 		return
 	}
-	log.Println(po.Photos)
-	id, err := po.Create()
-	if err != nil {
-		msg := fmt.Sprintf("Create post error: %v", err)
-		log.Println(msg)
-		c.JSON(http.StatusOK, BuildResp("400", msg, nil))
-		return
-	}
-	c.JSON(http.StatusOK, BuildResp("200", "Create post success", map[string]int64{"id": id}))
+	log.Println(post.Photos)
+
+	m.DB.Save(&post)
+	c.JSON(http.StatusOK, BuildResp("200", "Create post success", map[string]int64{"id": post.ID}))
 }
 
+// ShowPost 获取单个POST
 func ShowPost(c *gin.Context) {
 	id, err := ToInt(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusOK, BuildResp("400", "Parsing id error!", nil))
 		return
 	}
-	post, err := m.FindPost(id)
-	if err != nil {
+	var post m.Post
+	m.DB.Preload("Photos").Find(&post, id)
+	if post.ID == 0 {
 		msg := fmt.Sprintf("Get post error: %v", err)
 		c.JSON(http.StatusOK, BuildResp("400", msg, nil))
 		return
 	}
-	post.GetPhotos()
 	resp := BuildResp("200", "Get post success", post)
 	c.JSON(http.StatusOK, resp)
 }
 
-// PUT /posts/1
+// UpdatePost PUT /posts/1
 func UpdatePost(c *gin.Context) {
 	id, err := ToInt(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusOK, BuildResp("400", "Parsing id error!", nil))
 		return
 	}
-	post, err := m.FindPost(id)
-	if err != nil {
+	var post m.Post
+	m.DB.Find(&post, id)
+	if post.ID == 0 {
 		msg := fmt.Sprintf("Update post error: %v", err)
 		log.Println(msg)
 		c.JSON(http.StatusOK, BuildResp("400", msg, nil))
 	}
-	update_param := map[string]interface{}{}
 	var json m.Post
-	if c.BindJSON(&json) == nil {
-		if json.Content != "" {
-			update_param["content"] = json.Content
-		}
-	}
-	err = post.Update(update_param)
-	if err != nil {
-		msg := fmt.Sprintf("Update post error: %v", err)
-		log.Println(msg)
-		c.JSON(http.StatusOK, BuildResp("400", msg, nil))
-		return
-	}
+	c.BindJSON(&json)
+
+	m.DB.Model(&post).Select([]string{"content", "title", "event_id"}).Updates(json)
 	resp := BuildResp("200", "Update post success", nil)
 	c.JSON(http.StatusOK, resp)
 }
 
-// DELETE /posts/1
+// DestroyPost DELETE /posts/1
 func DestroyPost(c *gin.Context) {
 	id, err := ToInt(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusOK, BuildResp("400", "Params error!", nil))
+		c.JSON(http.StatusOK, BuildResp("400", "Parsing id error!", nil))
 		return
 	}
-	err = m.DestroyPost(id)
-	if err != nil {
-		fmt.Println(err)
-	}
-	resp := BuildResp("200", "Article destroied", nil)
+	var post m.Post
+	m.DB.Find(&post, id)
+	m.DB.Delete(&post)
+	resp := BuildResp("200", "Post destroied", nil)
 	c.JSON(http.StatusOK, resp)
 }
