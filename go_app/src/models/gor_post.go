@@ -49,6 +49,7 @@ func (p *Post) BeforeSave() (err error) {
 	for _, photoMarkDown := range re.FindAllString(p.Content, -1) {
 		photoURL := reURL.FindString(photoMarkDown)
 		//print(photoURL)
+		photoURL = strings.ReplaceAll(photoURL, "!small", "")
 		key := strings.Replace(photoURL, "https://akagi.oss-cn-hangzhou.aliyuncs.com/", "", 1)
 		//print(key)
 		var photo Photo
