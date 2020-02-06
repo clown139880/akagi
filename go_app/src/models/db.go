@@ -1,6 +1,8 @@
 package models
 
 import (
+	"os"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 )
@@ -15,7 +17,10 @@ func init() {
 	if err != nil {
 		panic("failed to connect database" + err.Error())
 	}
-	DB.LogMode(true)
+	if os.Getenv("APP_ENV") != "prod" {
+		DB.LogMode(true)
+	}
+
 	//Migrate the schema
 	//DB.AutoMigrate(&WeightLog{})
 }
