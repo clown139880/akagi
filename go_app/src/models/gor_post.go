@@ -57,16 +57,17 @@ func (p *Post) BeforeSave() (err error) {
 			//没有找到photos里面的记录
 			if strings.Contains(photoURL, "akagi.oss-cn-hangzhou.aliyuncs.com") {
 				photo.Key = key
-				photo.URL = photoURL
+				photo.OriginURL = photoURL
 				photo.PhotoableType = "Post"
 				photo.PhotoableID = p.ID
 				DB.Save(&photo)
 			} else {
 				photo.Key = utils.UploadFromURL(photoURL)
 				photo.PhotoableType = "Post"
+				photo.OriginURL = os.Getenv("END_POINT") + photo.Key
 				photo.PhotoableID = p.ID
 				DB.Save(&photo)
-				p.Content = strings.ReplaceAll(p.Content, photoURL, os.Getenv("END_POINT")+photo.Key)
+				p.Content = strings.ReplaceAll(p.Content, photoURL, photo.OriginURL)
 			}
 		}
 	}
