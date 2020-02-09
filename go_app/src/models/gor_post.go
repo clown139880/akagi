@@ -44,8 +44,23 @@ func (p *Post) AfterFind() (err error) {
 	return
 }
 
-// AfterSave 在保存前处理图片
-func (p *Post) AfterSave(tx *gorm.DB) (err error) {
+// AfterCreate 在创建之后处理图片
+func (p *Post) AfterCreate(scope *gorm.Scope) (err error) {
+	handlePhotos(p)
+	scope.DB().Model(p).Update("content", p.Content)
+	return
+}
+
+// BeforeSave 在保存前处理图片
+func (p *Post) BeforeSave() (err error) {
+	if p.ID > 0 {
+		handlePhotos(p)
+	}
+	DB.Model(&p.Event).Where("id = ?", p.EventID).UpdateColumn("updated_at", time.Now())
+	return
+}
+
+func handlePhotos(p *Post) {
 	re, _ := regexp.Compile(`!\[([^\]])*\]\(([^\)])+\)`)
 	reURL, _ := regexp.Compile(`http[^\)]+`)
 	for _, photoMarkDown := range re.FindAllString(p.Content, -1) {
@@ -74,7 +89,4 @@ func (p *Post) AfterSave(tx *gorm.DB) (err error) {
 			}
 		}
 	}
-	tx.Model(p).UpdateColumn("content", p.Content)
-	tx.Model(&p.Event).Where("id = ?", p.EventID).UpdateColumn("updated_at", time.Now())
-	return
 }
