@@ -42,9 +42,9 @@ func (p *Post) AfterFind() (err error) {
 	return
 }
 
-// BeforeSave 在保存前处理图片
-func (p *Post) BeforeSave() (err error) {
-	re, _ := regexp.Compile(`!\[([^\]])+\]\(([^\)])+\)`)
+// AfterSave 在保存前处理图片
+func (p *Post) AfterSave() (err error) {
+	re, _ := regexp.Compile(`!\[([^\]])*\]\(([^\)])+\)`)
 	reURL, _ := regexp.Compile(`http[^\)]+`)
 	for _, photoMarkDown := range re.FindAllString(p.Content, -1) {
 		photoURL := reURL.FindString(photoMarkDown)
@@ -72,6 +72,7 @@ func (p *Post) BeforeSave() (err error) {
 			}
 		}
 	}
+	DB.Model(&p).UpdateColumn("content", p.Content)
 	DB.Model(&p.Event).Where("id = ?", p.EventID).UpdateColumn("updated_at", time.Now())
 	return
 }
