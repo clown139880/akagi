@@ -46,17 +46,22 @@ func (p *Post) AfterFind() (err error) {
 
 // AfterCreate 在创建之后处理图片
 func (p *Post) AfterCreate(scope *gorm.Scope) (err error) {
-	handlePhotos(p)
 	scope.DB().Model(p).Update("content", p.Content)
 	return
 }
 
 // BeforeSave 在保存前处理图片
 func (p *Post) BeforeSave() (err error) {
+	p.Content = strings.ReplaceAll(p.Content, "!small", "")
 	if p.ID > 0 {
 		handlePhotos(p)
 	}
-	DB.Model(&p.Event).Where("id = ?", p.EventID).UpdateColumn("updated_at", time.Now())
+	return
+}
+
+// AfterSave 在保存前处理图片
+func (p *Post) AfterSave(tx *gorm.DB) (err error) {
+	tx.Model(&p.Event).Where("id = ?", p.EventID).UpdateColumn("updated_at", time.Now())
 	return
 }
 
@@ -66,7 +71,6 @@ func handlePhotos(p *Post) {
 	for _, photoMarkDown := range re.FindAllString(p.Content, -1) {
 		photoURL := reURL.FindString(photoMarkDown)
 		//print(photoURL)
-		photoURL = strings.ReplaceAll(photoURL, "!small", "")
 		key := strings.Replace(photoURL, "https://akagi.oss-cn-hangzhou.aliyuncs.com/", "", 1)
 		//print(key)
 		var photo Photo
