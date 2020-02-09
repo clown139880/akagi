@@ -8,6 +8,8 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/jinzhu/gorm"
 )
 
 // set flags to output more detailed log
@@ -43,7 +45,7 @@ func (p *Post) AfterFind() (err error) {
 }
 
 // AfterSave 在保存前处理图片
-func (p *Post) AfterSave() (err error) {
+func (p *Post) AfterSave(tx *gorm.DB) (err error) {
 	re, _ := regexp.Compile(`!\[([^\]])*\]\(([^\)])+\)`)
 	reURL, _ := regexp.Compile(`http[^\)]+`)
 	for _, photoMarkDown := range re.FindAllString(p.Content, -1) {
@@ -72,7 +74,7 @@ func (p *Post) AfterSave() (err error) {
 			}
 		}
 	}
-	DB.Model(&p).UpdateColumn("content", p.Content)
-	DB.Model(&p.Event).Where("id = ?", p.EventID).UpdateColumn("updated_at", time.Now())
+	tx.Model(p).UpdateColumn("content", p.Content)
+	tx.Model(&p.Event).Where("id = ?", p.EventID).UpdateColumn("updated_at", time.Now())
 	return
 }
