@@ -54,7 +54,8 @@ func CreatePost(c *gin.Context) {
 	log.Println(post.Photos)
 
 	m.DB.Save(&post)
-	c.JSON(http.StatusOK, BuildResp("200", "Create post success", map[string]int64{"id": post.ID}))
+	resp := BuildResp("200", "Create post success", post)
+	c.JSON(http.StatusOK, resp)
 }
 
 // ShowPost 获取单个POST
@@ -93,7 +94,7 @@ func UpdatePost(c *gin.Context) {
 	c.BindJSON(&json)
 
 	m.DB.Model(&post).Select([]string{"content", "title", "event_id"}).Updates(json)
-	resp := BuildResp("200", "Update post success", nil)
+	resp := BuildResp("200", "Update post success", post)
 	c.JSON(http.StatusOK, resp)
 }
 

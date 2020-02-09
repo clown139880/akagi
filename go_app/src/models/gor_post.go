@@ -44,23 +44,11 @@ func (p *Post) AfterFind() (err error) {
 	return
 }
 
-// AfterCreate 在创建之后处理图片
-func (p *Post) AfterCreate(scope *gorm.Scope) (err error) {
-	scope.DB().Model(p).Update("content", p.Content)
-	return
-}
-
-// BeforeSave 在保存前处理图片
-func (p *Post) BeforeSave() (err error) {
-	p.Content = strings.ReplaceAll(p.Content, "!small", "")
-	if p.ID > 0 {
-		handlePhotos(p)
-	}
-	return
-}
-
 // AfterSave 在保存前处理图片
 func (p *Post) AfterSave(tx *gorm.DB) (err error) {
+	p.Content = strings.ReplaceAll(p.Content, "!small", "")
+	handlePhotos(p)
+	tx.Model(p).UpdateColumn("content", p.Content)
 	tx.Model(&p.Event).Where("id = ?", p.EventID).UpdateColumn("updated_at", time.Now())
 	return
 }
