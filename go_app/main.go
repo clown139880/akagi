@@ -47,6 +47,8 @@ func main() {
 
 		v1.GET("/events/", c.FetchAllEvent)
 		v1.GET("/event/:id", c.ShowEvent)
+		v1.POST("/events", c.CreateEvent)
+		v1.PUT("/event/:id", c.UpdateEvent)
 	}
 
 	// Let's start the server
