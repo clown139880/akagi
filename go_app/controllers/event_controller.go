@@ -71,7 +71,7 @@ func CreateEvent(c *gin.Context) {
 	}
 	log.Println(event.Photos)
 
-	m.DB.Save(&event)
+	m.DB.Create(&event)
 	resp := BuildResp("200", "Create event success", event)
 	c.JSON(http.StatusOK, resp)
 }
@@ -96,9 +96,9 @@ func UpdateEvent(c *gin.Context) {
 	m.DB.Model(&event).Select([]string{"content", "title", "event_id"}).Updates(json)
 	for _, photo := range json.Photos {
 		if photo.ID == 0 {
-			m.DB.Save(&photo)
+			m.DB.Model(&event).Association("Photos").Append(&photo)
 		} else {
-			m.DB.Model(&photo).Update("is_logo", photo.IsLogo)
+			m.DB.Model(&photo).Updates(photo)
 		}
 	}
 

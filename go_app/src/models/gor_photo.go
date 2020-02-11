@@ -15,7 +15,7 @@ func init() {
 // Photo 图片
 type Photo struct {
 	ID            int64          `json:"id,omitempty" db:"id" valid:"-"`
-	Key           string         `json:"-" db:"key" valid:"-"`
+	Key           string         `json:"key" db:"key" valid:"-"`
 	IsLogo        bool           `json:"is_logo,omitempty" db:"is_logo" valid:"-"`
 	URL           string         `gorm:"-" json:"url,omitempty" valid:"-"`
 	OriginURL     string         `gorm:"column:url" json:"-"  valid:"-"`
@@ -31,6 +31,16 @@ func (p *Photo) AfterFind() (err error) {
 		p.URL = os.Getenv("END_POINT") + p.Key + "!small"
 	} else {
 		p.URL = p.OriginURL
+	}
+	return
+}
+
+// BeforeSave 为图片提供缩略图
+func (p *Photo) BeforeSave() (err error) {
+	if p.Key != "" {
+		p.OriginURL = os.Getenv("END_POINT") + p.Key
+	} else {
+		p.OriginURL = p.URL
 	}
 	return
 }
