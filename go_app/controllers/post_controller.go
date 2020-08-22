@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
 	// you can import models
 )
 
@@ -43,14 +44,26 @@ func FetchAllPost(c *gin.Context) {
 // CreatePost 创建POST
 func CreatePost(c *gin.Context) {
 	var post m.Post
-	err := c.BindJSON(&post)
+	err := c.ShouldBind(&post)
 	if err != nil {
-		data, _ := ioutil.ReadAll(c.Request.Body)
-		log.Printf("c.Request.body: %v", string(data))
 		log.Println(err)
-		c.JSON(http.StatusOK, err)
+
+		fmt.Printf("%+v\n", errors.Wrap(err, "read failed"))
+		c.JSON(http.StatusOK, gin.H{"status": http.StatusInternalServerError, "error": err})
 		return
 	}
+	file, _, err := c.Request.FormFile("file")
+	if err != nil {
+		log.Println(err)
+	} else {
+		content, err := ioutil.ReadAll(file)
+		if err != nil {
+			log.Println(err)
+		} else {
+			post.Content = string(content)
+		}
+	}
+
 	log.Println(post.Photos)
 
 	m.DB.Save(&post)
