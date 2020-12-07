@@ -41,3 +41,4 @@ config/global_conf.yml
 go_app/.vscode
 .bash_history
 go_app/main
+public/assets/
