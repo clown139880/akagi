@@ -2,14 +2,14 @@
 package models
 
 import (
+	time "go_app/src/time"
+	utils "go_app/src/utils"
 	"log"
-	time "main/src/time"
-	utils "main/src/utils"
 	"os"
 	"regexp"
 	"strings"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // set flags to output more detailed log
@@ -33,11 +33,11 @@ type Post struct {
 	IsSynced   bool           `json:"is_synced,omitempty" db:"is_synced" valid:"-"`
 	User       *User          `json:"user,omitempty" db:"user" valid:"-"`
 	Event      *Event         `json:"event,omitempty" db:"event" valid:"-"`
-	Photos     []Photo        `gorm:"auto_preload;polymorphic:Photoable;polymorphic_value:Post" json:"photos,omitempty" db:"photos" valid:"-"`
+	Photos     []Photo        `gorm:"auto_preload;polymorphic:Photoable;polymorphicValue:Post" json:"photos,omitempty" db:"photos" valid:"-"`
 }
 
 // AfterFind 为图片提供缩略图
-func (p *Post) AfterFind() (err error) {
+func (p *Post) AfterFind(*gorm.DB) (err error) {
 	for _, photo := range p.Photos {
 		p.Content = strings.ReplaceAll(p.Content, photo.OriginURL, photo.URL)
 	}

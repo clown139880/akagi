@@ -1,7 +1,7 @@
 package models
 
 import (
-	time "main/src/time"
+	time "go_app/src/time"
 )
 
 type (

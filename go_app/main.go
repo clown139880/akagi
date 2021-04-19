@@ -4,7 +4,7 @@ import (
 	"flag"
 	"log"
 
-	c "main/controllers"
+	c "go_app/controllers"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"

@@ -11,4 +11,4 @@ ENV GO111MODULE on
 ENV GOPROXY https://goproxy.io
 ENV GIT_SSL_NO_VERIFY 1
 RUN go mod download
-RUN go get github.com/oxequa/realize
+RUN go get -u github.com/cosmtrek/air

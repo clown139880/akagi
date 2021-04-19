@@ -2,8 +2,8 @@
 package models
 
 import (
+	time "go_app/src/time"
 	"log"
-	time "main/src/time"
 )
 
 // set flags to output more detailed log
@@ -29,5 +29,5 @@ type Event struct {
 	Place     string         `json:"place,omitempty" db:"place" valid:"-"`
 	Posts     []Post         `json:"posts,omitempty" db:"posts" valid:"-"`
 	User      *User          `json:"user,omitempty" db:"user" valid:"-"`
-	Photos    []Photo        `gorm:"auto_preload;polymorphic:Photoable;polymorphic_value:Event" json:"photos,omitempty" db:"photos"  valid:"-"`
+	Photos    []Photo        `gorm:"auto_preload;polymorphic:Photoable;polymorphicValue:Event" json:"photos,omitempty" db:"photos"  valid:"-"`
 }

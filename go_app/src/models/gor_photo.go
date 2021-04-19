@@ -2,9 +2,11 @@
 package models
 
 import (
+	time "go_app/src/time"
 	"log"
-	time "main/src/time"
 	"os"
+
+	"gorm.io/gorm"
 )
 
 // set flags to output more detailed log
@@ -26,7 +28,7 @@ type Photo struct {
 }
 
 // AfterFind 为图片提供缩略图
-func (p *Photo) AfterFind() (err error) {
+func (p *Photo) AfterFind(*gorm.DB) (err error) {
 	if p.Key != "" {
 		p.URL = os.Getenv("END_POINT") + p.Key + "!small"
 	} else {
@@ -36,7 +38,7 @@ func (p *Photo) AfterFind() (err error) {
 }
 
 // BeforeSave 为图片提供缩略图
-func (p *Photo) BeforeSave() (err error) {
+func (p *Photo) BeforeSave(*gorm.DB) (err error) {
 	if p.Key != "" {
 		p.OriginURL = os.Getenv("END_POINT") + p.Key
 	} else {

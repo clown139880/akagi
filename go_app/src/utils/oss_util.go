@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -21,15 +22,6 @@ func UploadFromURL(url string) string {
 	}
 	file, err := ioutil.ReadAll(res.Body)
 	fileReader := bytes.NewReader(file)
-	client, err := oss.New(os.Getenv("OSS_HOST"), os.Getenv("OSS_ACCESS_KEY"), os.Getenv("OSS_SECRET_KEY"))
-	if err != nil {
-		panic("oss client build error" + err.Error())
-	}
-
-	bucket, err := client.Bucket(os.Getenv("OSS_BUCKET"))
-	if err != nil {
-		panic("oss client bucket error" + err.Error())
-	}
 
 	key := createOssKey()
 	if strings.Contains(url, "ooo.0o0.ooo") {
@@ -41,13 +33,25 @@ func UploadFromURL(url string) string {
 		key = os.Getenv("APP_ENV") + "/" + key
 	}
 	key = key + ".jpg"
+	DoUpload(key, fileReader)
+	return key
+}
 
+func DoUpload(key string, fileReader io.Reader) {
+	client, err := oss.New(os.Getenv("OSS_HOST"), os.Getenv("OSS_ACCESS_KEY"), os.Getenv("OSS_SECRET_KEY"))
+	if err != nil {
+		panic("oss client build error" + err.Error())
+	}
+
+	bucket, err := client.Bucket(os.Getenv("OSS_BUCKET"))
+	if err != nil {
+		panic("oss client bucket error" + err.Error())
+	}
 	err = bucket.PutObject(key, fileReader)
 	if err != nil {
 		panic("put object error" + err.Error())
 	} else {
 		fmt.Print(os.Getenv("END_POINT") + key)
-		return key
 	}
 }
 

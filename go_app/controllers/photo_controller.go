@@ -1,9 +1,9 @@
 package controllers
 
 import (
+	m "go_app/src/models"
 	"io/ioutil"
 	"log"
-	m "main/src/models"
 	"net/http"
 	"reflect"
 

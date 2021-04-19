@@ -2,34 +2,36 @@ package controllers
 
 import (
 	"fmt"
+	m "go_app/src/models"
 	"io/ioutil"
 	"log"
-	m "main/src/models"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	// you can import models
 )
 
 // FetchAllEvent 获取所有的event
 func FetchAllEvent(c *gin.Context) {
 	var events []m.Event
-	page, _ := strconv.ParseInt(c.Query("page"), 10, 64)
-	perPage, _ := strconv.ParseInt(c.Query("per_page"), 10, 64)
-	forSelect, _ := strconv.ParseBool(c.Query("for_select"))
+	page, _ := strconv.Atoi(c.Query("page"))
+	perPage, _ := strconv.Atoi(c.Query("per_page"))
+	// forSelect, _ := strconv.ParseBool(c.Query("for_select"))
 	if perPage == 0 {
 		perPage = 8
 	}
 	query := m.DB.Order("updated_at desc")
-	if !forSelect {
-		query = query.Preload("Photos", func(db *gorm.DB) *gorm.DB {
-			return db.Order("is_logo DESC")
-		}).Limit(perPage).Offset(page * perPage)
-	}
+	query = query.Preload("Photos", func(db *gorm.DB) *gorm.DB {
+		return db.Order("is_logo DESC")
+	}).Limit(perPage).Offset(page * perPage)
 
 	query.Find(&events)
+
+	for _, e := range events {
+		fmt.Println(len(e.Photos))
+	}
 
 	if len(events) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No events found!"})

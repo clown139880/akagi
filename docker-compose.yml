@@ -64,7 +64,7 @@ services:
     build: ./go_app
     volumes:
       - ./go_app:/root
-    command: realize start
+    command: air -c /root/.air.toml
     environment:
       # Gin webserver run mode. Or "debug" for debugging
       - GIN_MODE=release

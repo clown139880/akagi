@@ -2,8 +2,8 @@
 package models
 
 import (
+	time "go_app/src/time"
 	"log"
-	time "main/src/time"
 )
 
 // set flags to output more detailed log
